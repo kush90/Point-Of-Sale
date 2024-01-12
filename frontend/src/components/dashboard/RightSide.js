@@ -75,8 +75,12 @@ const RightSide = () => {
     }
 
     useEffect(() => {
+        window.addEventListener('cartClear', getProductData);
         getCategoryData();
         getProductData();
+        return () => {
+            window.removeEventListener('clearCart', getProductData);
+          };
     }, []);
 
     const searchName = async (event) => {
@@ -143,7 +147,7 @@ const RightSide = () => {
 
                                         return (
                                             <MDBTabsItem key={cat._id}>
-                                                <MDBTabsLink  onClick={() => handleCategory(cat._id)} active={category === cat._id} >
+                                                <MDBTabsLink onClick={() => handleCategory(cat._id)} active={category === cat._id} >
                                                     {cat.name}
                                                 </MDBTabsLink>
                                             </MDBTabsItem>
@@ -168,10 +172,14 @@ const RightSide = () => {
                             {
                                 (loading === false) ? (productData.length > 0) && productData.map((pro, index) => {
 
+                                    return (
+                                        pro.qty > 0 && (
+                                            <MDBCol key={index} sm='4' md='3' lg="3">
+                                                <Card key={index} data={pro} />
+                                            </MDBCol>
+                                        )
+                                    )
 
-                                    return (<MDBCol key={index} sm='4' md='3' lg="3">
-                                        <Card key={index} data={pro} />
-                                    </MDBCol>)
                                 })
                                     : (
                                         <MDBSpinner role='status'>

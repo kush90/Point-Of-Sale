@@ -24,8 +24,13 @@ const Card = ({data})=> {
                 let cartsArray = JSON.parse(getStorage('carts'));
                 const existingProduct = cartsArray.find(cart => cart.id === item._id);
                 if(existingProduct) {
+                    if(existingProduct.qty < existingProduct.stock) {
                     existingProduct.qty += 1;
                     existingProduct.subTotal = (existingProduct.qty * existingProduct.price);
+                    }
+                    else {
+                        alert(`Available stocks (${existingProduct.stock})`); 
+                    }
                 }
                 else {
                     cartsArray.push({"img":{path:item.images[0].path,name:item.images[0].name},"id":item._id,"name":item.name,"category":item.categoryId.name,"price":item.price,"qty":1,"subTotal":(item.price*1),"stock":item.qty});
@@ -46,7 +51,7 @@ const Card = ({data})=> {
                         </span><br />
                         <span className="d-inline-block text-truncate category-color" style={{ maxWidth: 150 }}>{data.categoryId.name}</span><br />
                         <span className="d-inline-block text-truncate" style={{ maxWidth: 150 }}>MMK {data.price}</span><br />
-                        <MDBBtn disabled={data.qty == 0} onClick={(e)=>addToCart(data)} size='sm' className='ms-2  custom-card-btn text-success' tag='a' color='light' floating>
+                        <MDBBtn disabled={data.qty === 0} onClick={(e)=>addToCart(data)} size='sm' className='ms-2  custom-card-btn text-success' tag='a' color='light' floating>
                         <MDBTooltip tag='span' wrapperProps={{ color: 'primary' }} title="Add Cart">
                             <MDBIcon fas icon="shopping-cart" />
                         </MDBTooltip>

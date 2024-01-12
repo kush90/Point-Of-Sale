@@ -95,7 +95,6 @@ const LeftSide = () => {
     setCart(storageCart);
   }
   const pay = async() =>{
-    console.log(cart)
     try {
       setLoading(true)
       let response = await post('api/order/create', {products:cart,totalAmount:totalAmountOfCart()});
@@ -105,6 +104,8 @@ const LeftSide = () => {
           clearStorage('carts');
           setCart([])
           setLoading(false);
+          const event = new Event('cartClear');
+          window.dispatchEvent(event);
       }
   }
   catch (error) {
@@ -120,7 +121,8 @@ const LeftSide = () => {
   }
   return (
     <MDBCard className="left-side" alignment='center' style={{ height: 'inherit' }}>
-      <MDBCardHeader className='text-primary' style={{fontSize:"1rem"}}>Your Carts <span className='text-danger'>({cart.length})</span></MDBCardHeader>
+      <MDBCardHeader className='text-primary' style={{fontSize:"1rem"}}>Your Carts <span className='text-danger'>({cart.length})</span>
+      </MDBCardHeader>
       <div className="left-side-div">
         <MDBCardBody style={{ paddingLeft: 12 }}>
           <MDBRow>
@@ -148,7 +150,8 @@ const LeftSide = () => {
         </MDBRow>
         <MDBRow>
           <MDBCol size="12">
-            <MDBBtn disabled={cart.length == 0} onClick={pay}>Pay</MDBBtn>
+            <MDBBtn size='sm' disabled={cart.length === 0} onClick={pay}>Confirm</MDBBtn>
+            <MDBBtn size='sm' disabled={cart.length === 0} className="ms-2" color='danger' onClick={()=>{clearStorage('carts');setCart([])}}>Clear</MDBBtn>
           </MDBCol>
         </MDBRow>
 
