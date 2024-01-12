@@ -1,0 +1,43 @@
+.container-position-center {
+    position: relative;
+    top: 125px;
+    font-size: 12px;
+}
+
+.register-tab {
+
+    width: 96% !important;
+}
+
+.header-text {
+    position: absolute;
+    left: 40%;
+    top: 40%;
+    color: white;
+    font-size: 20px;
+}
+
+.loader-position {
+    position: relative;
+    top: 3px;
+}
+
+.login-register-btn {
+    margin-left: 5px;
+}
+
+
+
+.register-btn {
+    margin-top: 15px;
+}
+
+.custom-text {
+    position: relative;
+    top: -4px;
+}
+
+.nav-position {
+    position: relative;
+top: 5px;
+}
