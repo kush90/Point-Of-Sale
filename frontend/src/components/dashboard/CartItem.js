@@ -8,9 +8,15 @@ import {
 
 import '../../styles/main.css'
 import { API_URL } from '../../Helper';
+import QtyAlert from '../modals/QtyAlert';
 
 const CartItem = ({ item, deleteItem, increaseQty, decreaseQty, getQty }) => {
     const [qty, setQty] = React.useState(item.qty);
+
+    const [qtyAlert, setQtyAlert] = React.useState(false);
+    const [qtyAlertMsg, setQtyAlertMsg] = React.useState('')
+
+    const toggleOpen = (value) => setQtyAlert(value);
 
     useEffect(() => {
         if (item) setQty(item.qty);
@@ -22,7 +28,11 @@ const CartItem = ({ item, deleteItem, increaseQty, decreaseQty, getQty }) => {
             getQty(+newValue, item.id);
             setQty(newValue)
         }
-        else { alert(`Available stocks (${item.stock})`); getQty((+item.stock), item.id); }
+        else {
+            setQtyAlertMsg(`Available stocks (${item.stock})`)
+            setQtyAlert(true)
+            getQty((+item.stock), item.id);
+        }
     }
 
     const increase = (item) => {
@@ -79,7 +89,7 @@ const CartItem = ({ item, deleteItem, increaseQty, decreaseQty, getQty }) => {
                     </MDBBtn>
                 </div>
             </MDBCardBody>
-
+            <QtyAlert qtyAlert={qtyAlert} qtyAlertMsg={qtyAlertMsg} toggleOpen={toggleOpen}></QtyAlert>
         </MDBCard>
 
     )

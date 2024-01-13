@@ -7,17 +7,25 @@ import {
   MDBRow,
   MDBCol,
   MDBBtn,
+  MDBSpinner
 } from 'mdb-react-ui-kit';
 import { ToastContainer, toast } from 'react-toastify';
 
 import CartItem from '../dashboard/CartItem';
 import { getStorage, clearStorage, createStorage } from '../../Helper';
-import {post} from '../../Api'
+import { post } from '../../Api';
+import QtyAlert from '../modals/QtyAlert';
 
 const LeftSide = () => {
 
   const [loading, setLoading] = React.useState(false);
   const [cart, setCart] = React.useState([]);
+
+  const [qtyAlert, setQtyAlert] = React.useState(false);
+  const [qtyAlertMsg, setQtyAlertMsg] = React.useState('')
+
+  const toggleOpen = (value) => setQtyAlert(value);
+
   useEffect(() => {
     // Function to update the cart when localStorage changes
     const updateCart = () => {
@@ -56,12 +64,15 @@ const LeftSide = () => {
     let storageCart = JSON.parse(getStorage('carts'));
     storageCart.map((item) => {
       if (item.id === id) {
-        if(item.qty < item.stock) {
+        if (item.qty < item.stock) {
           item.qty += 1;
           item.subTotal = (item.price * item.qty);
         }
-        else {alert(`Available stockes (${item.stock})`)}
-       
+        else {
+          setQtyAlertMsg(`Available stocks (${item.stock})`)
+          setQtyAlert(true)
+        }
+
       }
       return item;
     });
@@ -81,47 +92,47 @@ const LeftSide = () => {
     createStorage('carts', storageCart);
     setCart(storageCart);
   }
-  const getQty = (qty,id) =>{
+  const getQty = (qty, id) => {
     console.log(qty)
     let storageCart = JSON.parse(getStorage('carts'));
     storageCart.map((item) => {
       if (item.id === id) {
-          item.qty = qty;
-          item.subTotal = (item.price * item.qty)
+        item.qty = qty;
+        item.subTotal = (item.price * item.qty)
       }
       return item;
     });
     createStorage('carts', storageCart);
     setCart(storageCart);
   }
-  const pay = async() =>{
+  const pay = async () => {
     try {
       setLoading(true)
-      let response = await post('api/order/create', {products:cart,totalAmount:totalAmountOfCart()});
+      let response = await post('api/order/create', { products: cart, totalAmount: totalAmountOfCart() });
       if (response.status === 200) {
 
-          toast.success(response.data.message);
-          clearStorage('carts');
-          setCart([])
-          setLoading(false);
-          const event = new Event('cartClear');
-          window.dispatchEvent(event);
+        toast.success(response.data.message);
+        clearStorage('carts');
+        setCart([])
+        setLoading(false);
+        const event = new Event('cartClear');
+        window.dispatchEvent(event);
       }
-  }
-  catch (error) {
+    }
+    catch (error) {
       if (error.response && error.response.status === 400) {
-          toast.error(error.response.data.error)
+        toast.error(error.response.data.error)
       }
       else {
-          toast.error(error.message)
+        toast.error(error.message)
       }
       setLoading(false);
-  }
-    
+    }
+
   }
   return (
     <MDBCard className="left-side" alignment='center' style={{ height: 'inherit' }}>
-      <MDBCardHeader className='text-primary' style={{fontSize:"1rem"}}>Your Carts <span className='text-danger'>({cart.length})</span>
+      <MDBCardHeader className='text-primary' style={{ fontSize: "1rem" }}>Your Carts <span className='text-danger'>({cart.length})</span>
       </MDBCardHeader>
       <div className="left-side-div">
         <MDBCardBody style={{ paddingLeft: 12 }}>
@@ -130,7 +141,7 @@ const LeftSide = () => {
               (cart && cart.length > 0) && cart.map((item, index) => {
                 return (
                   <MDBCol size="12" key={index} style={{ marginBottom: 10 }}>
-                    <CartItem size="12" key={index} item={item} deleteItem={deletItemCart} increaseQty={increaseQty} decreaseQty={decreaseQty} getQty={getQty}/>
+                    <CartItem size="12" key={index} item={item} deleteItem={deletItemCart} increaseQty={increaseQty} decreaseQty={decreaseQty} getQty={getQty} />
                   </MDBCol>
                 )
               })
@@ -150,15 +161,21 @@ const LeftSide = () => {
         </MDBRow>
         <MDBRow>
           <MDBCol size="12">
-            <MDBBtn size='sm' disabled={cart.length === 0} onClick={pay}>Confirm</MDBBtn>
-            <MDBBtn size='sm' disabled={cart.length === 0} className="ms-2" color='danger' onClick={()=>{clearStorage('carts');setCart([])}}>Clear</MDBBtn>
+            {loading === false ? (
+              <MDBBtn size='sm' disabled={cart.length === 0} onClick={pay}>Confirm</MDBBtn>
+            ) : (<MDBBtn size='sm' disabled  >
+              <MDBSpinner size='sm' role='status' tag='span' className='me-2 loader-position' block />
+              Paying...
+            </MDBBtn>)
+
+            }
+
+            <MDBBtn size='sm' disabled={cart.length === 0} className="ms-2" color='danger' onClick={() => { clearStorage('carts'); setCart([]) }}>Clear</MDBBtn>
           </MDBCol>
         </MDBRow>
-
-
       </MDBCardFooter>
       <ToastContainer />
-
+      <QtyAlert qtyAlert={qtyAlert} qtyAlertMsg={qtyAlertMsg} toggleOpen={toggleOpen}></QtyAlert>
     </MDBCard>
   );
 }

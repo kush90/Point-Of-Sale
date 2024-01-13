@@ -43,19 +43,14 @@
     transition: none !important;
 }
 
-/* .right-side-category::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.3);
-    background-color: #F5F5F5;
-} */
-
 .right-side-category::-webkit-scrollbar {
-    width: 2px;
-    /* background-color: #F5F5F5; */
+    height: 1px;
+    width: 1px;
 }
 
+/* Handle */
 .right-side-category::-webkit-scrollbar-thumb {
-    background-color: #000000;
-    border: 2px solid #555555;
+    background: #888;
 }
 
 .category-btn {

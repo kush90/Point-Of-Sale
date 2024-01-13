@@ -10,6 +10,7 @@ import Dashboard from './pages/Dashboard';
 import Error from './pages/Error';
 import Main from './layouts/Main';
 import Setting from './pages/Setting';
+import Order from './pages/Order';
 
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
         <Route path="/dashboard" element={<AuthGuard Component={Main} />}>
           <Route index element={<Dashboard />} />
           <Route path="/dashboard/setting" element={<Setting/>}/>
+          <Route path="/dashboard/order" element={<Order/>}/>"
         </Route>
         <Route path="*" element={<Error />} />
       </Routes>

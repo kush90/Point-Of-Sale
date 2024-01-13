@@ -1,0 +1,36 @@
+.custom-margin-top {
+    margin-top: 6% !important;
+}
+
+.custom-height {
+    height: 625px;
+}
+
+.order-date {
+    position: absolute;
+    right: 51px;
+}
+
+.order-card-body {
+    height: inherit;
+    overflow-y: scroll;
+}
+
+.font-14 {
+    font-size: 14px;
+}
+
+.order-card-body::-webkit-scrollbar{
+    height: 2px;
+    width: 2px;
+}
+
+/* Track */
+.order-card-body::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+.order-card-body::-webkit-scrollbar-thumb {
+  background: #888; 
+}
