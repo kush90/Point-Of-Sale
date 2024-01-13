@@ -136,8 +136,8 @@ const ProductForm = (props) => {
                             <MDBInput className='mb-4' required onChange={(e) => setPrice(e.target.value)} value={price} label='Price' />
                             <MDBInput className='mb-4' required onChange={(e) => setQty(e.target.value)} value={qty} label='Qty' />
                             <MDBInput className='mb-4' required onChange={(e) => setBarcode(e.target.value)} value={barCode} label='Barcode' />
-                            <label for="file-upload" class="custom-file-upload">
-                                <i class="fa fa-cloud-upload"></i> <span>Upload Images</span>
+                            <label htmlFor="file-upload" className="custom-file-upload">
+                                <i className="fa fa-cloud-upload"></i> <span>Upload Images</span>
                             </label>
                             <input accept='image/*' ref={ref} id="file-upload" type="file"  onChange={(e)=>imageUpload(e)} multiple />
                             <MDBContainer className='product-modal-img-list'>

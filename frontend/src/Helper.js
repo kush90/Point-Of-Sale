@@ -38,3 +38,4 @@ export const separateAndCapitalize = (str) => {
 
     return result;
 }
+export var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"];

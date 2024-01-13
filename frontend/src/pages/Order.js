@@ -3,20 +3,23 @@ import {
     MDBAccordion, MDBAccordionItem, MDBRow, MDBCol, MDBCard,
     MDBCardBody,
     MDBCardHeader,
-    MDBCardFooter,
-    MDBBtn,
-    MDBTooltip, MDBIcon,
-    MDBBadge, MDBListGroup, MDBListGroupItem
+    MDBIcon,
+    MDBBadge, MDBListGroup, MDBListGroupItem,
+    MDBSpinner,
+    MDBCardFooter
 } from 'mdb-react-ui-kit';
 import '../styles/order.css'
 import { ToastContainer, toast } from 'react-toastify';
 
 import { get } from '../Api';
-import { formatDateToLocaleString } from '../Helper';
+import { formatDateToLocaleString, months } from '../Helper';
+import RechartBarChart from '../components/BarChart';
 const Order = () => {
 
-    const [loading, setLoading] = React.useState(false);
+    const [loading, setLoading] = React.useState(true);
     const [orderData, setOrderData] = React.useState([]);
+    const [chartData, setChartData] = React.useState([]);
+    const [month, setMonth] = React.useState('')
     const getOrderData = async () => {
         try {
             const response = await get('api/order/getAll');
@@ -36,21 +39,49 @@ const Order = () => {
         }
     }
 
+    const getOrderDataChart = async (month) => {
+        let monthQuery = (month) ? `?month=${month}` : ''
+        try {
+            const response = await get(`api/order/chart${monthQuery}`);
+            if (response.status === 200) {
+                setLoading(false);
+                setChartData(response.data.data);
+            }
+        }
+        catch (error) {
+            if (error.response && error.response.status === 400) {
+                toast.error(error.response.data.error)
+            }
+            else {
+                toast.error(error.message)
+            }
+            setLoading(false);
+        }
+    }
+
     useEffect(() => {
         getOrderData();
+        getOrderDataChart();
     }, []);
+
+    const handleMonth = (e) => {
+        if (e.target.value) {
+            setMonth(e.target.value)
+            getOrderDataChart(e.target.value)
+        }
+    }
     return (
         <MDBRow className='custom-height custom-margin-top'>
-            <MDBCol md='6' style={{ height: 'inherit' }}>
+            <MDBCol md='5' style={{ height: 'inherit' }}>
                 <MDBCard alignment='center' style={{ height: 'inherit' }}>
-                    <MDBCardHeader>
-
-                        <span>Orders ({orderData.length})</span>
+                    <MDBCardHeader className='text-primary'>
+                    Orders 
+                        <span className='text-danger'> ({orderData.length}) </span>
                     </MDBCardHeader>
                     <MDBCardBody className='order-card-body'>
                         <MDBAccordion flush>
                             {
-                                (orderData && orderData.length > 0) && orderData.map((order, index) => {
+                                (loading === false) ? (orderData && orderData.length > 0) && orderData.map((order, index) => {
 
                                     return (
 
@@ -61,9 +92,9 @@ const Order = () => {
 
                                             <MDBListGroup light numbered style={{ minWidth: '22rem' }}>
                                                 {
-                                                    (order.products && order.products.length > 0) && order.products.map((pro) => {
+                                                    (order.products && order.products.length > 0) && order.products.map((pro, index) => {
                                                         return (
-                                                            <MDBListGroupItem className='d-flex justify-content-between align-items-start'>
+                                                            <MDBListGroupItem key={index} className='d-flex justify-content-between align-items-start'>
                                                                 <div className='ms-2 me-auto font-14'>
                                                                     <div className='fw-bold'>{pro.name}</div>{pro.category}<br />
                                                                 </div>
@@ -81,10 +112,48 @@ const Order = () => {
                                             </MDBListGroup>
                                         </MDBAccordionItem>
                                     )
-                                })
+                                }) :
+                                    (
+
+                                        <MDBSpinner role='status'>
+                                            <span className='visually-hidden'>Loading...</span>
+                                        </MDBSpinner>
+
+                                    )
 
                             }
                         </MDBAccordion>
+                    </MDBCardBody>
+                    <MDBCardFooter className='text-muted'>2 days ago</MDBCardFooter>
+                </MDBCard>
+            </MDBCol>
+            <MDBCol md='7' style={{ height: 'inherit' }}>
+                <MDBCard alignment='center' style={{ height: 'inherit' }}>
+                    <MDBCardHeader className='text-primary' style={{ position: "relative" }}>
+
+                        Order Bar Chart Default by <span className='text-danger'>( This Week )</span>
+                        <MDBBadge className='ms-4 pointer' onClick={e => setMonth('')}>Set Bar Chart Default</MDBBadge>
+                        <div className='month-select'>
+                            <select className="browser-default custom-select" value={month} onChange={(e) => handleMonth(e)}>
+                                <option value={null} defaultValue={''}>Choose Month</option>
+                                {
+                                    months.map((month, index) => {
+                                        return <option key={index} value={index} >{month}</option>
+                                    })
+                                }
+
+                            </select>
+                        </div>
+                    </MDBCardHeader>
+                    <MDBCardBody className='order-card-body'>
+                        {
+                            (loading === false) ? (<RechartBarChart orders={chartData} month={month} />) : (
+                                <MDBSpinner role='status'>
+                                    <span className='visually-hidden'>Loading...</span>
+                                </MDBSpinner>
+                            )
+                        }
+
                     </MDBCardBody>
                     <MDBCardFooter className='text-muted'>2 days ago</MDBCardFooter>
                 </MDBCard>

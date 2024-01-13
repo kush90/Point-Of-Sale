@@ -173,7 +173,7 @@ const RightSide = () => {
                                 (loading === false) ? (productData.length > 0) && productData.map((pro, index) => {
 
                                     return (
-                                        pro.qty > 0 && (
+                                        (pro.available > 0) && (
                                             <MDBCol key={index} sm='4' md='3' lg="3">
                                                 <Card key={index} data={pro} />
                                             </MDBCol>

@@ -20,18 +20,18 @@ const CartItem = ({ item, deleteItem, increaseQty, decreaseQty, getQty }) => {
 
     useEffect(() => {
         if (item) setQty(item.qty);
-    });
+    },[item]);
 
     const qtyChange = (e, item) => {
         let newValue = e.target.value.replace(/^0+(?=\d)/, '').replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
-        if (newValue <= item.stock) {
+        if (newValue <= item.available) {
             getQty(+newValue, item.id);
             setQty(newValue)
         }
         else {
-            setQtyAlertMsg(`Available stocks (${item.stock})`)
+            setQtyAlertMsg(`Available stocks (${item.available})`)
             setQtyAlert(true)
-            getQty((+item.stock), item.id);
+            getQty((+item.available), item.id);
         }
     }
 
@@ -44,8 +44,8 @@ const CartItem = ({ item, deleteItem, increaseQty, decreaseQty, getQty }) => {
                 <div className='d-flex justify-content-between align-items-center'>
                     <div className='d-flex align-items-center'>
                         <img
-                            src={`${API_URL}/${item.img?.path}`}
-                            alt={item.img?.name}
+                            src={item.img.path ? `${API_URL}/${item.img?.path}` : ''}
+                            alt={item.img.name ? item.img?.name : ''}
                             style={{ width: '45px', height: '45px' }}
                             className='rounded-circle'
                         />
@@ -67,7 +67,7 @@ const CartItem = ({ item, deleteItem, increaseQty, decreaseQty, getQty }) => {
                     </MDBBadge>
                 </div>
                 <div className='qty-wrapper'>
-                    <MDBBtn onClick={() => increase(item)} size='sm' className='ms-2  custom-card-btn plus text-success' tag='a' color='light' floating>
+                    <MDBBtn onClick={() => increase(item)} size='sm' className='ms-2  custom-card-btn plus text-success' tag='span' color='light' floating>
                         <MDBTooltip placement='left' tag='span' wrapperProps={{ color: 'primary' }} title="Increase Qty">
                             <MDBIcon fas icon="plus" />
                         </MDBTooltip>
@@ -82,7 +82,7 @@ const CartItem = ({ item, deleteItem, increaseQty, decreaseQty, getQty }) => {
                     />
 
 
-                    <MDBBtn size='sm' disabled={qty === 1 || qty === 0} onClick={() => decreaseQty(item.id)} className='ms-2  custom-card-btn minus text-danger' tag='a' color='light' floating>
+                    <MDBBtn size='sm' disabled={qty === 1 || qty === 0} onClick={() => decreaseQty(item.id)} className='ms-2  custom-card-btn minus text-danger' tag='span' color='light' floating>
                         <MDBTooltip placement='right' tag='span' wrapperProps={{ color: 'primary' }} title="Decrease Qty">
                             <MDBIcon fas icon="minus" />
                         </MDBTooltip>

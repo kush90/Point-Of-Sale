@@ -33,7 +33,7 @@ const Setting = () => {
     const [productData, setProductData] = React.useState([]);
     const [deleteDataProductConfirm, setDeleteDataProductConfirm] = React.useState(false)
     const [tempEditProductData, setTempEditProductData] = React.useState('');
-    const productHeader = ['name', 'category', 'price', 'stock', 'createdAt', 'action'];
+    const productHeader = ['name', 'category', 'price', 'Qty','available', 'createdAt', 'action'];
 
 
     const getCategoryData = async () => {
@@ -295,7 +295,7 @@ const Setting = () => {
 
     return (
         <MDBRow className='custom-height custom-margin-top'>
-            <MDBCol md='5' style={{ height: 'inherit' }}>
+            <MDBCol md='3' style={{ height: 'inherit' }}>
                 <MDBCard alignment='center'>
                     <MDBCardHeader>
 
@@ -313,7 +313,7 @@ const Setting = () => {
                     <MDBCardFooter className='text-muted'>2 days ago</MDBCardFooter>
                 </MDBCard>
             </MDBCol>
-            <MDBCol md='7' >
+            <MDBCol md='9' >
                 <MDBCard alignment='center'>
                     <MDBCardHeader>
 

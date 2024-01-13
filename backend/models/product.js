@@ -31,6 +31,10 @@ const productSchema = mongoose.Schema({
         type:Number,
         required :true
     },
+    available: {
+        type:Number,
+        required:true
+    },
     images: [
         {
           type: Object
@@ -41,5 +45,4 @@ const productSchema = mongoose.Schema({
         timestamps: true
     }
 );
-
 module.exports =  mongoose.model('Product',productSchema)

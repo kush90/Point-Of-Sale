@@ -31,6 +31,7 @@ const Table = ({ title,header, data,editData,deleteData }) => {
                                 {value.categoryId && <td>{value.categoryId.name}</td>}
                                 {value.price && <td>{value.price}</td>}
                                 {title === 'product' &&<td className='text-danger'>{ value.qty }</td>}
+                                {title === 'product' &&<td className='text-danger'>{ value.available }</td>}
                                 {title === 'product' && <td>{formatDateToLocaleString(value.createdAt)}</td> }
                                 <td>
                                     <MDBBtn onClick={()=>editRow(value)} size='sm' className='ms-2  text-primary' tag='a' color='light' floating>

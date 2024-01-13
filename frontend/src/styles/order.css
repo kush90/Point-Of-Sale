@@ -20,17 +20,23 @@
     font-size: 14px;
 }
 
-.order-card-body::-webkit-scrollbar{
+.order-card-body::-webkit-scrollbar {
     height: 2px;
     width: 2px;
 }
 
 /* Track */
 .order-card-body::-webkit-scrollbar-track {
-  background: #f1f1f1; 
+    background: #f1f1f1;
 }
- 
+
 /* Handle */
 .order-card-body::-webkit-scrollbar-thumb {
-  background: #888; 
+    background: #888;
+}
+
+.month-select {
+    position: absolute;
+    right: 6px;
+    top: 7px;
 }

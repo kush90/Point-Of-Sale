@@ -37,7 +37,7 @@ const create = async (req, res) => {
         products.map(async (product) => {
             let latestRecord = await Product.findById(product.id);
             if (latestRecord) {
-                latestRecord.qty = Number(latestRecord.qty - product.qty);
+                latestRecord.available = Number(latestRecord.available - product.qty);
                 latestRecord.save();
             }
 
@@ -122,4 +122,38 @@ const remove = async (req, res) => {
     }
 }
 
-module.exports = { create, update, getAll, get, remove };
+const chart = async (req, res) => {
+    console.log(req.query)
+    try {
+        let query = {};
+        if (Object.keys(req.query).length !== 0) {
+            if (req.query.month) {
+                let month = (+req.query.month  + 1); 
+                query.$expr = {
+                    $eq: [
+                        { $month: '$createdAt' },
+                        month
+                    ]
+                };
+            }
+        }
+        else {
+            const today = new Date();
+            const startOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
+            const endOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 6, 23, 59, 59, 999);
+            query = {
+                createdAt: {
+                    $gte: startOfWeek,
+                    $lt: endOfWeek
+                }
+            }
+        }
+
+        const orders = await Order.find(query);
+        res.status(200).json({ data: orders })
+    } catch (error) {
+        res.status(400).json({ "error": error.message })
+    }
+}
+
+module.exports = { create, update, getAll, get, remove, chart };

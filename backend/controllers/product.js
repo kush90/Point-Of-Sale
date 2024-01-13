@@ -38,7 +38,7 @@ const create = async (req, res) => {
         });
         console.log(imageInfo)
         const createdBy = req.user._id;
-        const product = await Product.create({ name, categoryId, description, price, qty, barCode, createdBy, "images": imageInfo });
+        const product = await Product.create({ name, categoryId, description, price, qty, barCode, createdBy, "available": qty, "images": imageInfo });
         const newProduct = await product.populate('categoryId');
         console.log(newProduct)
         if (!newProduct) {
@@ -54,7 +54,7 @@ const update = async (req, res) => {
     const { id } = req.params;
     try {
         let imageInfo = [];
-        if (req.body?.images?.length > 0) {
+        if (req.body?.images) {
             imageInfo = JSON.parse(req.body.images);
         }
         if (req.files.length > 0) {
@@ -69,15 +69,22 @@ const update = async (req, res) => {
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(404).json({ error: 'No such product' })
         }
+        const existingDocument = await Product.findOne({ _id: id }).lean();
 
-        const product = await Product.findOneAndUpdate({ _id: id }, {
-            ...req.body, "images": imageInfo
-        }, { new: true }).populate('categoryId');
-
-        if (!product) {
+        if (!existingDocument) {
+            // Handle the case when the document is not found
             return res.status(404).json({ error: 'No such product' })
         }
-
+        // check whether the qty is changed, if it is changed, update available value to qty value
+        let available = existingDocument.available;
+        if (existingDocument.qty !== +req.body.qty) {
+            available = req.body.qty;
+        }
+        console.log(req.body)
+        const product = await Product.findOneAndUpdate({ _id: id }, {
+            ...req.body, "images": imageInfo, available
+        }, { new: true }).populate('categoryId');
+        console.log(product)
         res.status(200).json({ data: product, message: 'Product is successfully updated.' })
     } catch (error) {
         res.status(400).json({ "error": error.message })

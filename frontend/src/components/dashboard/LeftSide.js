@@ -64,12 +64,12 @@ const LeftSide = () => {
     let storageCart = JSON.parse(getStorage('carts'));
     storageCart.map((item) => {
       if (item.id === id) {
-        if (item.qty < item.stock) {
+        if (item.qty < item.available) {
           item.qty += 1;
           item.subTotal = (item.price * item.qty);
         }
         else {
-          setQtyAlertMsg(`Available stocks (${item.stock})`)
+          setQtyAlertMsg(`Available stocks (${item.available})`)
           setQtyAlert(true)
         }
 
@@ -93,7 +93,6 @@ const LeftSide = () => {
     setCart(storageCart);
   }
   const getQty = (qty, id) => {
-    console.log(qty)
     let storageCart = JSON.parse(getStorage('carts'));
     storageCart.map((item) => {
       if (item.id === id) {
