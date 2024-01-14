@@ -135,7 +135,7 @@ const ProductForm = (props) => {
                             </div>
                             <MDBInput className='mb-4' required onChange={(e) => setPrice(e.target.value)} value={price} label='Price' />
                             <MDBInput className='mb-4' required onChange={(e) => setQty(e.target.value)} value={qty} label='Qty' />
-                            <MDBInput className='mb-4' required onChange={(e) => setBarcode(e.target.value)} value={barCode} label='Barcode' />
+                            <MDBInput maxLength={15} className='mb-4' required onChange={(e) => setBarcode(e.target.value)} value={barCode} label='Barcode' />
                             <label htmlFor="file-upload" className="custom-file-upload">
                                 <i className="fa fa-cloud-upload"></i> <span>Upload Images</span>
                             </label>

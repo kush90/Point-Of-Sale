@@ -1,10 +1,14 @@
 import React from 'react';
 import { MDBTable, MDBTableHead, MDBTableBody, MDBBtn, MDBTooltip, MDBIcon } from 'mdb-react-ui-kit';
-import { formatDateToLocaleString,separateAndCapitalize } from '../Helper';
+import { formatDateToLocaleString, separateAndCapitalize } from '../Helper';
+import BarCodeCanavas from './BarCodeCanavas';
 
-const Table = ({ title,header, data,editData,deleteData }) => {
+import '../styles/table.css'
 
-    const editRow = (row) =>{
+
+const Table = ({ title, header, data, editData, deleteData }) => {
+
+    const editRow = (row) => {
         editData(row)
     }
     return (
@@ -27,19 +31,21 @@ const Table = ({ title,header, data,editData,deleteData }) => {
                         return (
                             <tr key={index} >
                                 <th scope='row'>{index + 1}</th>
-                                <td  className="text-truncate text-primary pointer" style={{ maxWidth: 116 }}>{value.name}</td>
+                                <td className="text-truncate text-primary pointer" style={{ maxWidth: 116 }}>{value.name}</td>
                                 {value.categoryId && <td>{value.categoryId.name}</td>}
                                 {value.price && <td>{value.price}</td>}
-                                {title === 'product' &&<td className='text-danger'>{ value.qty }</td>}
-                                {title === 'product' &&<td className='text-danger'>{ value.available }</td>}
-                                {title === 'product' && <td>{formatDateToLocaleString(value.createdAt)}</td> }
+                                {title === 'product' && <td className='text-danger'>{value.qty}</td>}
+                                {title === 'product' && <td className='text-danger'>{value.available}</td>}
+                                {title === 'product' && <td className='text-danger'><BarCodeCanavas value={value.barCode} /></td>}
+                                {title === 'product' && <td>{formatDateToLocaleString(value.createdAt)}</td>}
+                               
                                 <td>
-                                    <MDBBtn onClick={()=>editRow(value)} size='sm' className='ms-2  text-primary' tag='a' color='light' floating>
+                                    <MDBBtn onClick={() => editRow(value)} size='sm' className='ms-2  text-primary' tag='a' color='light' floating>
                                         <MDBTooltip tag='span' title="Edit">
                                             <MDBIcon fas icon="edit" />
                                         </MDBTooltip>
                                     </MDBBtn>
-                                    <MDBBtn onClick={()=>deleteData(value)} size='sm' className='ms-2  text-danger' tag='a' color='light' floating>
+                                    <MDBBtn onClick={() => deleteData(value)} size='sm' className='ms-2  text-danger' tag='a' color='light' floating>
                                         <MDBTooltip tag='span' title="Delete">
                                             <MDBIcon fas icon="trash" />
                                         </MDBTooltip>
@@ -47,7 +53,7 @@ const Table = ({ title,header, data,editData,deleteData }) => {
                                 </td>
                             </tr>
                         )
-                    }) : (<tr><td colSpan={header.length+1}>No Data</td></tr>)
+                    }) : (<tr><td colSpan={header.length + 1}>No Data</td></tr>)
                 }
             </MDBTableBody>
 

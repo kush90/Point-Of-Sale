@@ -33,7 +33,7 @@ const Setting = () => {
     const [productData, setProductData] = React.useState([]);
     const [deleteDataProductConfirm, setDeleteDataProductConfirm] = React.useState(false)
     const [tempEditProductData, setTempEditProductData] = React.useState('');
-    const productHeader = ['name', 'category', 'price', 'Qty','available', 'createdAt', 'action'];
+    const productHeader = ['name', 'category', 'price', 'Qty','available','barCode', 'createdAt', 'action'];
 
 
     const getCategoryData = async () => {
