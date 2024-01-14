@@ -151,11 +151,11 @@ const Login = () => {
                 </MDBRow>
 
                 {loading === false ? (
-                  <MDBBtn type='submit' className='mb-4' block>
+                  <MDBBtn type='submit' className='mb-4' block='true'>
                     Sign in
                   </MDBBtn>
-                ) : (<MDBBtn disabled className='mb-4' block>
-                  <MDBSpinner size='sm' role='status' tag='span' className='me-2 loader-position' block />
+                ) : (<MDBBtn disabled className='mb-4' block='true'>
+                  <MDBSpinner size='sm' role='status' tag='span' className='me-2 loader-position' block='true' />
                   Signing in...
                 </MDBBtn>)
 
@@ -180,11 +180,11 @@ const Login = () => {
                 <MDBRadio name='type' id='inlineRadio2' value='Admin' label='Admin' inline onClick={() => setType('Admin')} />
 
                 {loading === false ? (
-                  <MDBBtn type='submit' className='mb-4 register-btn' block>
+                  <MDBBtn type='submit' className='mb-4 register-btn' block='true'>
                     Register
                   </MDBBtn>
-                ) : (<MDBBtn disabled className='mb-4 register-btn' block>
-                  <MDBSpinner size='sm' role='status' tag='span' className='me-2 loader-position' block />
+                ) : (<MDBBtn disabled className='mb-4 register-btn' block='true'>
+                  <MDBSpinner size='sm' role='status' tag='span' className='me-2 loader-position' block='true' />
                   Register ...
                 </MDBBtn>)
 

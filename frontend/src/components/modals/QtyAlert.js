@@ -15,7 +15,6 @@ const QtyAlert = ({ qtyAlert, toggleOpen,qtyAlertMsg }) => {
     }
 
     return (
-        <>
             <MDBModal open={qtyAlert} tabIndex='-1' onClose={close}>
                 <MDBModalDialog size='sm'>
                     <MDBModalContent>
@@ -27,7 +26,6 @@ const QtyAlert = ({ qtyAlert, toggleOpen,qtyAlertMsg }) => {
                     </MDBModalContent>
                 </MDBModalDialog>
             </MDBModal>
-        </>
     );
 }
 

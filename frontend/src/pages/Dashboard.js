@@ -9,10 +9,10 @@ const Dashboard = () => {
   return (
     <MDBRow className='custom-height custom-margin-top'>
       <MDBCol md='5' style={{height:'inherit'}}>
-       <LeftSide/>
+       <><LeftSide/></>
       </MDBCol>
       <MDBCol md='7' style={{height:'inherit'}}>
-       <RightSide/>
+       <><RightSide/></>
       </MDBCol>
     </MDBRow>
   )

@@ -332,8 +332,8 @@ const Setting = () => {
                 </MDBCard>
             </MDBCol>
 
-            <CategoryForm open={catModal} closeModal={closeCatModal} data={tempEditCatData} />
-            <ProductForm open={productModal} closeModal={closeProductModal} data={tempEditProductData} category={categoryData} />
+            { catModal && <CategoryForm open={catModal} closeModal={closeCatModal} data={tempEditCatData} />}
+            { productModal && <ProductForm open={productModal} closeModal={closeProductModal} data={tempEditProductData} category={categoryData} />}
             <ToastContainer />
             {
                 deleteDataCatConfirm && (

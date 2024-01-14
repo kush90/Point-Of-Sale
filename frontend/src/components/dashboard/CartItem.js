@@ -89,7 +89,7 @@ const CartItem = ({ item, deleteItem, increaseQty, decreaseQty, getQty }) => {
                     </MDBBtn>
                 </div>
             </MDBCardBody>
-            <QtyAlert qtyAlert={qtyAlert} qtyAlertMsg={qtyAlertMsg} toggleOpen={toggleOpen}></QtyAlert>
+            { qtyAlert && <QtyAlert qtyAlert={qtyAlert} qtyAlertMsg={qtyAlertMsg} toggleOpen={toggleOpen}></QtyAlert> }
         </MDBCard>
 
     )

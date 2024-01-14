@@ -173,8 +173,8 @@ const LeftSide = () => {
           </MDBCol>
         </MDBRow>
       </MDBCardFooter>
-      <ToastContainer />
-      <QtyAlert qtyAlert={qtyAlert} qtyAlertMsg={qtyAlertMsg} toggleOpen={toggleOpen}></QtyAlert>
+      <><ToastContainer /></>
+       { qtyAlert && <QtyAlert qtyAlert={qtyAlert} qtyAlertMsg={qtyAlertMsg} toggleOpen={toggleOpen}></QtyAlert>}
     </MDBCard>
   );
 }
