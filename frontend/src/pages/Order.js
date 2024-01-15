@@ -70,6 +70,10 @@ const Order = () => {
             getOrderDataChart(e.target.value)
         }
     }
+    const clearMonth = () =>{
+        setMonth('');
+        getOrderDataChart();
+    }
     return (
         <MDBRow className='custom-height custom-margin-top'>
             <MDBCol md='5' style={{ height: 'inherit' }}>
@@ -132,7 +136,7 @@ const Order = () => {
                     <MDBCardHeader className='text-primary' style={{ position: "relative" }}>
 
                         Order Bar Chart Default by <span className='text-danger'>( This Week )</span>
-                        <MDBBadge className='ms-4 pointer' onClick={e => setMonth('')}>Set Bar Chart Default</MDBBadge>
+                        <MDBBadge style={{ opacity: month ? 1 : 0.6, cursor: month ? 'default' : 'not-allowed' }} className='ms-4 pointer' onClick={clearMonth}>Set Bar Chart Default</MDBBadge>
                         <div className='month-select'>
                             <select className="browser-default custom-select" value={month} onChange={(e) => handleMonth(e)}>
                                 <option value={null} defaultValue={''}>Choose Month</option>

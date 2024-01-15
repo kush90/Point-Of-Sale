@@ -9,6 +9,8 @@ import {
 import '../../styles/main.css'
 import { API_URL } from '../../Helper';
 import QtyAlert from '../modals/QtyAlert';
+import defaultImage from '../../assets/default.jpeg';
+
 
 const CartItem = ({ item, deleteItem, increaseQty, decreaseQty, getQty }) => {
     const [qty, setQty] = React.useState(item.qty);
@@ -44,8 +46,8 @@ const CartItem = ({ item, deleteItem, increaseQty, decreaseQty, getQty }) => {
                 <div className='d-flex justify-content-between align-items-center'>
                     <div className='d-flex align-items-center'>
                         <img
-                            src={item.img.path ? `${API_URL}/${item.img?.path}` : ''}
-                            alt={item.img.name ? item.img?.name : ''}
+                            src={item.img.path ? `${API_URL}/${item.img?.path}` : defaultImage}
+                            alt={item.img.name ? item.img?.name : 'default'}
                             style={{ width: '45px', height: '45px' }}
                             className='rounded-circle'
                         />

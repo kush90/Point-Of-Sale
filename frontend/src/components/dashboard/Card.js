@@ -3,7 +3,6 @@ import {
     MDBBtn,
     MDBCard,
     MDBCardBody,
-    MDBCardText,
     MDBCardImage,
     MDBIcon,
     MDBTooltip
@@ -11,6 +10,7 @@ import {
 import '../../styles/main.css';
 import QtyAlert from '../modals/QtyAlert';
 import { API_URL, createStorage, checkStorage, getStorage } from '../../Helper';
+import defaultImage from '../../assets/default.jpeg';
 
 const Card = ({ data }) => {
 
@@ -23,7 +23,7 @@ const Card = ({ data }) => {
         let checkCart = checkStorage('carts');
         if (checkCart === false) {
             let cartsArray = [];
-            cartsArray.push({ "img": { path: (item.images.length > 0) ?? item.images[0]?.path, name:  (item.images.length > 0) ?? item.images[0]?.name }, "id": item._id, "name": item.name, "category": item.categoryId.name, "price": item.price, "qty": 1, "subTotal": (item.price * 1), "available": item.available });
+            cartsArray.push({ "img": { path: (item.images.length > 0) ? item.images[0]?.path : '', name:  (item.images.length > 0) ? item.images[0]?.name : '' }, "id": item._id, "name": item.name, "category": item.categoryId.name, "price": item.price, "qty": 1, "subTotal": (item.price * 1), "available": item.available });
             createStorage('carts', cartsArray);
         }
         else {
@@ -40,7 +40,7 @@ const Card = ({ data }) => {
                 }
             }
             else {
-                cartsArray.push({ "img": { path: (item.images.length > 0) ?? item.images[0]?.path, name:  (item.images.length > 0) ?? item.images[0]?.name }, "id": item._id, "name": item.name, "category": item.categoryId.name, "price": item.price, "qty": 1, "subTotal": (item.price * 1), "available": item.available });
+                cartsArray.push({ "img": { path: (item.images.length > 0) ? item.images[0]?.path : '', name:  (item.images.length > 0) ? item.images[0]?.name : '' }, "id": item._id, "name": item.name, "category": item.categoryId.name, "price": item.price, "qty": 1, "subTotal": (item.price * 1), "available": item.available });
             }
             createStorage('carts', cartsArray)
         }
@@ -51,7 +51,7 @@ const Card = ({ data }) => {
 
     return (
         <MDBCard className='custom-card'>
-            <MDBCardImage className='img-fluid img-thumbnail custom-card-image hover-overlay' src={(data.images.length > 0) ? `${API_URL}/${data.images[0]?.path}`: ''} alt={(data.images.length > 0 ) ? data.images[0]?.name : ''} position='top' />
+            <MDBCardImage className='img-fluid img-thumbnail custom-card-image hover-overlay' src={(data.images.length > 0) ? `${API_URL}/${data.images[0]?.path}`: defaultImage} alt={(data.images.length > 0 ) ? data.images[0]?.name : 'default'} position='top' />
             <MDBCardBody className='custom-card-height-body'>
                 {/* <MDBCardText> */}
                     <span className="d-inline-block text-truncate text-primary pointer" style={{ maxWidth: 116 }}>

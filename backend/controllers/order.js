@@ -42,9 +42,6 @@ const create = async (req, res) => {
             }
 
         });
-        if (!order) {
-            return res.status(404).json({ error: 'No such order' })
-        }
         res.status(200).json({ data: order, message: 'Order is successfully created.' })
     } catch (error) {
         res.status(400).json({ error: error.message })

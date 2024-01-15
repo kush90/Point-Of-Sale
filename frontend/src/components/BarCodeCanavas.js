@@ -3,7 +3,7 @@
 import React, { useRef } from 'react';
 import Barcode from './BarCode';
 import html2canvas from 'html2canvas';
-import { MDBTable, MDBTableHead, MDBTableBody, MDBBtn, MDBTooltip, MDBIcon } from 'mdb-react-ui-kit';
+import {  MDBBtn, MDBTooltip, MDBIcon } from 'mdb-react-ui-kit';
 
 const BarCodeCanavas = ({ value, width, height }) => {
     const barcodeRef = useRef(null);
