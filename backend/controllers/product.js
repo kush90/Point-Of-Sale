@@ -1,4 +1,5 @@
 const Product = require('../models/product');
+const Stock = require('../models/stock')
 const mongoose = require('mongoose');
 const { deleteImage } = require('../middleware/fileUpload');
 
@@ -36,11 +37,10 @@ const create = async (req, res) => {
                 type: file.mimetype
             }
         });
-        console.log(imageInfo)
         const createdBy = req.user._id;
         const product = await Product.create({ name, categoryId, description, price, qty, barCode, createdBy, "available": qty, "images": imageInfo });
         const newProduct = await product.populate('categoryId');
-        console.log(newProduct)
+        const stock = await Stock.create({productId:product.id,qty,times:1});
         if (!newProduct) {
             return res.status(404).json({ error: 'No such product' })
         }
@@ -70,7 +70,9 @@ const update = async (req, res) => {
             return res.status(404).json({ error: 'No such product' })
         }
         const existingDocument = await Product.findOne({ _id: id }).lean();
-
+        console.log(existingDocument)
+        let existingStock = await Stock.findOne({ productId: id }).lean();
+       
         if (!existingDocument) {
             // Handle the case when the document is not found
             return res.status(404).json({ error: 'No such product' })
@@ -80,11 +82,21 @@ const update = async (req, res) => {
         if (existingDocument.qty !== +req.body.qty) {
             available = req.body.qty;
         }
-        console.log(req.body)
+        // if available become zero, so the price will be
+        if(existingDocument.available === 0 && existingDocument.qty === 0) {
+            // req.body.qty = 0;
+            if(req.body.qty) {
+                console.log(existingStock)
+                existingStock.times += 1;
+                existingStock.qty += +req.body.qty;
+                await Stock.findOneAndUpdate({ productId: id }, existingStock);
+            }
+            
+
+        }
         const product = await Product.findOneAndUpdate({ _id: id }, {
             ...req.body, "images": imageInfo, available
         }, { new: true }).populate('categoryId');
-        console.log(product)
         res.status(200).json({ data: product, message: 'Product is successfully updated.' })
     } catch (error) {
         res.status(400).json({ "error": error.message })

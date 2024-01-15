@@ -1,5 +1,6 @@
 const Order = require('../models/order');
-const Product = require('../models/product')
+const Product = require('../models/product');
+const Stock = require('../models/stock')
 const mongoose = require('mongoose')
 
 const create = async (req, res) => {
@@ -37,8 +38,14 @@ const create = async (req, res) => {
         products.map(async (product) => {
             let latestRecord = await Product.findById(product.id);
             if (latestRecord) {
+               
                 latestRecord.available = Number(latestRecord.available - product.qty);
+                if(latestRecord.available === 0) latestRecord.qty = 0;
                 latestRecord.save();
+                let existingStock = await Stock.findOne({ productId: latestRecord._id }).lean();
+                existingStock.sold += +product.qty;
+                await Stock.findOneAndUpdate({ productId: product.id }, existingStock);
+  
             }
 
         });

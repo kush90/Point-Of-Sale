@@ -39,7 +39,7 @@ const Receipt = ({ open, toggleOpen, data }) => {
 
     return (
         <>
-            <MDBModal className="receipt" open={open} onClose={closeDialog} tabIndex='-1'>
+            <MDBModal staticBackdrop className="receipt" open={open}  tabIndex='-1'>
                 <MDBModalDialog>
                     <MDBModalContent>
                         <MDBModalHeader className='bg-primary' style={{ height: 50 }}>
@@ -126,8 +126,8 @@ const Receipt = ({ open, toggleOpen, data }) => {
                             <MDBBtn color='secondary' onClick={closeDialog}>
                                 Close
                             </MDBBtn>
-                            <MDBBtn onClick={downloadReceipt}>Download</MDBBtn>
-                            <MDBBtn onClick={()=>window.print()}>Print</MDBBtn>
+                            <MDBBtn color='danger' onClick={downloadReceipt}>Download</MDBBtn>
+                            <MDBBtn  color='success'onClick={()=>window.print()}>Print</MDBBtn>
                         </MDBModalFooter>
                     </MDBModalContent>
                 </MDBModalDialog>
