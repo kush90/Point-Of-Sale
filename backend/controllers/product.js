@@ -40,7 +40,7 @@ const create = async (req, res) => {
         const createdBy = req.user._id;
         const product = await Product.create({ name, categoryId, description, price, qty, barCode, createdBy, "available": qty, "images": imageInfo });
         const newProduct = await product.populate('categoryId');
-        const stock = await Stock.create({productId:product.id,qty,times:1});
+        const stock = await Stock.create({ productId: product.id, qty, times: 1 });
         if (!newProduct) {
             return res.status(404).json({ error: 'No such product' })
         }
@@ -72,7 +72,7 @@ const update = async (req, res) => {
         const existingDocument = await Product.findOne({ _id: id }).lean();
         console.log(existingDocument)
         let existingStock = await Stock.findOne({ productId: id }).lean();
-       
+
         if (!existingDocument) {
             // Handle the case when the document is not found
             return res.status(404).json({ error: 'No such product' })
@@ -83,15 +83,15 @@ const update = async (req, res) => {
             available = req.body.qty;
         }
         // if available become zero, so the price will be
-        if(existingDocument.available === 0 && existingDocument.qty === 0) {
+        if (existingDocument.available === 0 && existingDocument.qty === 0) {
             // req.body.qty = 0;
-            if(req.body.qty) {
+            if (req.body.qty) {
                 console.log(existingStock)
                 existingStock.times += 1;
                 existingStock.qty += +req.body.qty;
                 await Stock.findOneAndUpdate({ productId: id }, existingStock);
             }
-            
+
 
         }
         const product = await Product.findOneAndUpdate({ _id: id }, {
@@ -162,4 +162,70 @@ const remove = async (req, res) => {
         res.status(400).json({ "error": error.message })
     }
 }
-module.exports = { create, update, getAll, get, remove };
+
+const mostSoldProduct = async (req, res) => {
+    try {
+        let product = await Stock.aggregate([
+            {
+                $sort: { sold: -1 } // Sort by the most sold field in descending order
+            },
+            {
+                $limit: 5 // Limit the result to one document (the most sold)
+            },
+            {
+                $lookup: {
+                    from: 'products', // Replace 'products' with the actual name of your product collection
+                    localField: 'productId',
+                    foreignField: '_id',
+                    as: 'product'
+                }
+            },
+            {
+                $unwind: '$product' // Unwind the product array created by the $lookup stage
+            },
+            {
+                $lookup: {
+                    from: 'categories', // Replace 'categories' with the actual name of your category collection
+                    localField: 'product.categoryId', // Assuming there is a categoryId field in your product schema
+                    foreignField: '_id',
+                    as: 'product.category'
+                }
+            },
+            {
+                $unwind: '$product.category' // Unwind the category array created by the second $lookup stage
+            },
+            {
+                $project: {
+                    _id: 1,
+                    qty: 1,
+                    times: 1,
+                    sold: 1,
+                    createdAt: 1,
+                    updatedAt: 1,
+                    product: {
+                        _id: '$product._id',
+                        name: '$product.name',
+                        price: '$product.price',
+                        images: '$product.images',
+                        category: {
+                            _id: '$product.category._id',
+                            name: '$product.category.name'
+                        }
+                    }
+                }
+            },
+            {
+                $addFields: {
+                    totalAmount: { $multiply: ['$product.price', '$sold'] }
+                }
+            }
+        ]);
+        console.log(product)
+        res.status(200).json({ data: product })
+    }
+    catch (error) {
+        res.status(400).json({ "error": error.message })
+    }
+
+}
+module.exports = { create, update, getAll, get, remove, mostSoldProduct };

@@ -2,8 +2,12 @@
     margin-top: 6% !important;
 }
 
-.custom-height {
-    height: 625px;
+.custom-margin-top-row {
+    margin-top: 2% !important;
+}
+
+.order .custom-height {
+    height: 300px;
 }
 
 .order-date {
