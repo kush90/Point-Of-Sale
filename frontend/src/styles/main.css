@@ -64,7 +64,7 @@
 
 .custom-card-image {
     height: 100px !important;
-    object-fit: cover;
+    object-fit: fill;
 }
 
 .custom-card-height-body {

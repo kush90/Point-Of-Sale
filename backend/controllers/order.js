@@ -82,9 +82,9 @@ const getAll = async (req, res) => {
         let query = {};
         if (Object.keys(req.query).length !== 0) {
 
-            // Check if req.query.search is present and not empty
-            if (req.query.search) {
-                query.name = { '$regex': req.query.search, '$options': 'i' };
+            // Check if req.query.referenceNo is present and not empty
+            if (req.query.referenceNo) {
+                query.referenceNo = { '$regex': req.query.referenceNo, '$options': 'i' };
             }
         }
         const orders = await Order.find(query).sort({ createdAt: -1 });

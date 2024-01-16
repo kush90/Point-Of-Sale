@@ -7,7 +7,7 @@ import {
     MDBBadge, MDBListGroup, MDBListGroupItem,
     MDBSpinner,
     MDBCardFooter,
-    MDBBtn, MDBTable, MDBTableHead, MDBTableBody
+    MDBTable, MDBTableHead, MDBTableBody, MDBInput
 } from 'mdb-react-ui-kit';
 import '../styles/order.css'
 import { ToastContainer, toast } from 'react-toastify';
@@ -25,6 +25,7 @@ const Order = () => {
     const [chartData, setChartData] = React.useState([]);
     const [mostSoldProduct, setMostSoldProduct] = React.useState([]);
     const [month, setMonth] = React.useState('')
+    const [referenceNo, setReferenceNo] = React.useState('ORD0000')
     const getOrderData = async () => {
         try {
             const response = await get('api/order/getAll');
@@ -96,18 +97,52 @@ const Order = () => {
             getOrderDataChart(e.target.value)
         }
     }
+    
     const clearMonth = () => {
         setMonth('');
         getOrderDataChart();
     }
+
+    const searchOrder = async (e) => {
+        try {
+            let userInput = e.target.value.replace(/^0+(?=\d)/, '').replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
+            setReferenceNo(userInput);
+            setLoading(true)
+            const response = await get(`api/order/getAll?referenceNo=${'ORD0000' + userInput}`);
+            if (response.status === 200) {
+                setLoading(false);
+                setOrderData(response.data.data);
+                setReferenceNo('')
+
+
+            }
+        }
+        catch (error) {
+            if (error.response && error.response.status === 400) {
+                toast.error(error.response.data.error)
+            }
+            else {
+                toast.error(error.message)
+            }
+            setLoading(false);
+        }
+
+
+
+    }
     return (
         <div className='order'>
             <MDBRow className='custom-height custom-margin-top'>
-                <MDBCol md='5' style={{ height: 'inherit' }}>
+                <MDBCol md='5' style={{ height: 615 }}>
                     <MDBCard alignment='center' style={{ height: 'inherit' }}>
                         <MDBCardHeader className='text-primary'>
-                            Orders
-                            <span className='text-danger'> ({orderData.length}) </span>
+                           <p> Orders
+                            <span className='text-danger'> ({orderData.length})       </span>
+                            <span>
+                            <MDBInput
+                                onKeyUp={searchOrder} label='Order Reference no' placeholder='Enter just last number' id='form1' type='text' />
+                            </span>
+                            </p>
                         </MDBCardHeader>
                         <MDBCardBody className='order-card-body'>
                             <MDBAccordion flush>
@@ -159,6 +194,7 @@ const Order = () => {
                     </MDBCard>
                 </MDBCol>
                 <MDBCol md='7' style={{ height: 'inherit' }}>
+                    {/* order chart */}
                     <MDBCard alignment='center' style={{ height: 'inherit' }}>
                         <MDBCardHeader className='text-primary' style={{ position: "relative" }}>
 
@@ -186,70 +222,70 @@ const Order = () => {
                             }
 
                         </MDBCardBody>
-                        <MDBCardFooter className='text-muted'>2 days ago</MDBCardFooter>
                     </MDBCard>
+                    {/* Top 5 most sold products */}
+                    <MDBRow className='custom-height custom-margin-top-row'>
+                        <MDBCol md='12' style={{ height: 'inherit' }}>
+                            <MDBCard alignment='center' style={{ height: 'inherit' }}>
+                                <MDBCardHeader className='text-primary'>
+                                    Top <span className='text-danger'>(5)</span> Most Sold Products
+                                    <span className='text-danger'>  </span>
+                                </MDBCardHeader>
+                                <MDBCardBody className='order-card-body' style={{ height: 'inherit' }}>
+                                    <MDBTable align='middle'>
+                                        <MDBTableHead>
+                                            <tr>
+                                                <th scope='col'>Product</th>
+                                                <th scope='col'>Category</th>
+                                                <th scope='col'>Price</th>
+                                                <th scope='col'>Total Sold</th>
+                                                <th scope='col'>Total Amount</th>
+                                            </tr>
+                                        </MDBTableHead>
+                                        <MDBTableBody style={{ height: 'inherit' }}>
+                                            {
+                                                (mostSoldProduct && mostSoldProduct.length > 0) && mostSoldProduct.map((pro, index) => {
+                                                    return (<tr key={index}>
+                                                        <td>
+                                                            <div className='d-flex align-items-center'>
+                                                                <img
+                                                                    src={(pro.product.images && pro.product.images.length > 0) ? `${API_URL}/${pro.product.images[0]?.path}` : defaultImage} alt={(pro.product.images && pro.product.images.length > 0) ? pro.product.images[0]?.name : 'default'}
+                                                                    style={{ width: '45px', height: '45px' }}
+                                                                    className='rounded-circle'
+                                                                />
+                                                                <div className='ms-3'>
+                                                                    <p className='fw-bold mb-1'>{pro.product.name}</p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <p className='fw-normal mb-1'>{pro.product.category?.name}</p>
+                                                        </td>
+                                                        <td>
+                                                            <p className='fw-normal mb-1'>{pro.product.price}</p>
+
+                                                        </td>
+                                                        <td> <p className='fw-normal mb-1'>{pro.sold}</p></td>
+                                                        <td>
+                                                            <p className='fw-normal mb-1'>{pro.totalAmount}</p>
+                                                        </td>
+                                                    </tr>)
+                                                })
+                                            }
+
+                                        </MDBTableBody>
+                                    </MDBTable>
+                                </MDBCardBody>
+                            </MDBCard>
+                        </MDBCol>
+                        <ToastContainer />
+
+                    </MDBRow>
                 </MDBCol>
                 <ToastContainer />
 
             </MDBRow>
-            <MDBRow className='custom-height custom-margin-top-row'>
-                <MDBCol md='7' style={{ height: 'inherit' }}>
-                    <MDBCard alignment='center' style={{ height: 'inherit' }}>
-                        <MDBCardHeader className='text-primary'>
-                            Top 5 Most Sold Products
-                            <span className='text-danger'>  </span>
-                        </MDBCardHeader>
-                        <MDBCardBody className='order-card-body' style={{ height: 'inherit' }}>
-                            <MDBTable align='middle'>
-                                <MDBTableHead>
-                                    <tr>
-                                        <th scope='col'>Product</th>
-                                        <th scope='col'>Category</th>
-                                        <th scope='col'>Price</th>
-                                        <th scope='col'>Total Sold</th>
-                                        <th scope='col'>Total Amount</th>
-                                    </tr>
-                                </MDBTableHead>
-                                <MDBTableBody style={{ height: 'inherit' }}>
-                                    {
-                                        (mostSoldProduct && mostSoldProduct.length > 0) && mostSoldProduct.map((pro, index) => {
-                                            return (<tr key={index}>
-                                                <td>
-                                                    <div className='d-flex align-items-center'>
-                                                        <img
-                                                            src={(pro.product.images && pro.product.images.length > 0) ? `${API_URL}/${pro.product.images[0]?.path}` : defaultImage} alt={(pro.product.images && pro.product.images.length > 0) ? pro.product.images[0]?.name : 'default'}
-                                                            style={{ width: '45px', height: '45px' }}
-                                                            className='rounded-circle'
-                                                        />
-                                                        <div className='ms-3'>
-                                                            <p className='fw-bold mb-1'>{pro.product.name}</p>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <p className='fw-normal mb-1'>{pro.product.category?.name}</p>
-                                                </td>
-                                                <td>
-                                                    <p className='fw-normal mb-1'>{pro.product.price}</p>
 
-                                                </td>
-                                                <td> <p className='fw-normal mb-1'>{pro.sold}</p></td>
-                                                <td>
-                                                    <p className='fw-normal mb-1'>{pro.totalAmount}</p>
-                                                </td>
-                                            </tr>)
-                                        })
-                                    }
-
-                                </MDBTableBody>
-                            </MDBTable>
-                        </MDBCardBody>
-                        <MDBCardFooter className='text-muted'>2 days ago</MDBCardFooter>
-                    </MDBCard>
-                </MDBCol>
-                <ToastContainer />
-
-            </MDBRow>
         </div>
     )
 }
