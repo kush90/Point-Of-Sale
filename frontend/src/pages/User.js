@@ -22,7 +22,7 @@ const User = () => {
     const [tempDeleteData, setTempDeleteData] = React.useState('');
     const [tempPasswordData, setTempPasswordData] = React.useState('');
     const userHeader = ['name', 'type', 'action'];
-    const [title, setTitle] = React.useState('Create User Form')
+    const [title, setTitle] = React.useState('Create New User')
 
     const getUserData = async () => {
         try {
@@ -76,7 +76,7 @@ const User = () => {
     const editUser = (value) =>{
         setTempEditData(value);
         setTempPasswordData('');
-        setTitle(`Update User Form`)
+        setTitle(`Update User`)
     }
 
     const changePassword = (value) =>{
@@ -98,7 +98,7 @@ const User = () => {
             setLoading(false);
             setTempEditData('');
             setTempPasswordData('');
-            setTitle('Create User Form')
+            setTitle('Create New User')
             }
         }
         catch (error) {

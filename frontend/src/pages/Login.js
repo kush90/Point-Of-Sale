@@ -129,7 +129,7 @@ const Login = () => {
                 Login
               </MDBTabsLink>
             </MDBTabsItem>
-            <MDBTabsItem>
+            {/* <MDBTabsItem>
               <MDBTabsLink className='register-tab'
                
                 onClick={() => !loading && setLoginRegisterActive('register')}
@@ -137,7 +137,7 @@ const Login = () => {
               >
                 Register
               </MDBTabsLink>
-            </MDBTabsItem>
+            </MDBTabsItem> */}
           </MDBTabs>
 
           <MDBTabsContent>
@@ -164,16 +164,16 @@ const Login = () => {
 
                 }
               </form>
-              <div className='text-center'>
+              {/* <div className='text-center'>
                 <span className='custom-text'>
                   Not a member ?
                 </span>
                 <MDBBtn disabled={loading === true} className='login-register-btn' color="primary" onClick={() => setLoginRegisterActive('register')} size="sm">Register</MDBBtn>
-              </div>
+              </div> */}
 
             </MDBTabsPane>
 
-            <MDBTabsPane open={(loginRegisterActive === 'register')}>
+            {/* <MDBTabsPane open={(loginRegisterActive === 'register')}>
               <form onSubmit={register}>
 
                 <MDBInput className='mb-4' id='form8Example2' label='Username' />
@@ -200,7 +200,7 @@ const Login = () => {
                 <MDBBtn disabled={loading === true} className='login-register-btn' color="primary" onClick={() => setLoginRegisterActive('login')} size="sm">Login</MDBBtn>
               </div>
 
-            </MDBTabsPane>
+            </MDBTabsPane> */}
           </MDBTabsContent>
         </MDBCol>
       </MDBRow>

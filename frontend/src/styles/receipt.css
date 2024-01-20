@@ -118,15 +118,15 @@ h3 {
 }
 
 .receipt p,
-ul,
-ol {
+.receipt ul,
+.receipt ol {
     margin-bottom: 10px;
     font-weight: normal;
 }
 
 .receipt p li,
-ul li,
-ol li {
+.receipt ul li,
+.receipt ol li {
     margin-left: 5px;
     list-style-position: inside;
 }

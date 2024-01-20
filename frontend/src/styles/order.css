@@ -7,7 +7,7 @@
 }
 
 .order .custom-height {
-    height: 322px;
+    height: 320px;
 }
 
 .order-date {
@@ -18,6 +18,11 @@
 .order-card-body {
     height: inherit;
     overflow-y: scroll;
+}
+
+.order-card {
+    max-height: 585px;
+    overflow-y: auto;
 }
 
 .font-14 {
@@ -36,6 +41,20 @@
 
 /* Handle */
 .order-card-body::-webkit-scrollbar-thumb {
+    background: #888;
+}
+.order-card::-webkit-scrollbar {
+    height: 2px;
+    width: 2px;
+}
+
+/* Track */
+.order-card::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+.order-card::-webkit-scrollbar-thumb {
     background: #888;
 }
 

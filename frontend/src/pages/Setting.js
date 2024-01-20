@@ -294,12 +294,12 @@ const Setting = () => {
     }
 
     return (
-        <MDBRow className='custom-height custom-margin-top'>
-            <MDBCol md='3' style={{ height: 'inherit' }}>
+        <MDBRow className='custom-margin-top'>
+            <MDBCol md='3' >
                 <MDBCard alignment='center'>
                     <MDBCardHeader>
 
-                        <span>Categories</span>
+                        <span className='text-primary'>Categories</span>
                         <MDBBtn onClick={() => setCatModal(true)} size='sm' className='text-primary position-absolute top-0 end-0 mt-1 me-3' tag='a' color='light' floating>
                             <MDBTooltip tag='span' title="Add Category">
                                 <MDBIcon fas icon="add" />
@@ -307,17 +307,16 @@ const Setting = () => {
                         </MDBBtn>
 
                     </MDBCardHeader>
-                    <MDBCardBody>
+                    <MDBCardBody className='custom-height-setting'>
                         <Table title={'category'} header={categoryHeader} data={categoryData} editData={openCategoryModal} deleteData={deleteCategoryConfirm} />
                     </MDBCardBody>
-                    <MDBCardFooter className='text-muted'>2 days ago</MDBCardFooter>
                 </MDBCard>
             </MDBCol>
             <MDBCol md='9' >
                 <MDBCard alignment='center'>
                     <MDBCardHeader>
 
-                        <span>Products</span>
+                        <span className='text-primary'>Products</span>
                         <MDBBtn onClick={() => setProductModal(true)} size='sm' className='text-primary position-absolute top-0 end-0 mt-1 me-3' tag='a' color='light' floating>
                             <MDBTooltip tag='span' title="Add Category">
                                 <MDBIcon fas icon="add" />
@@ -325,10 +324,9 @@ const Setting = () => {
                         </MDBBtn>
 
                     </MDBCardHeader>
-                    <MDBCardBody>
+                    <MDBCardBody  className='custom-height-setting'>
                         <Table title={'product'} header={productHeader} data={productData} editData={openProductModal} deleteData={deleteProductConfirm} />
                     </MDBCardBody>
-                    <MDBCardFooter className='text-muted'>2 days ago</MDBCardFooter>
                 </MDBCard>
             </MDBCol>
 

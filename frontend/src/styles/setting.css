@@ -3,8 +3,9 @@
     margin-top: 6% !important;
 }
 
-.custom-height {
-    height: 625px;
+.custom-height-setting {
+    max-height: 620px !important;
+    overflow-y: auto;
 }
 
 .product-modal-img-list {
@@ -46,4 +47,14 @@ input[type="file"] {
     cursor: pointer;
     background-color: #3b71ca;
     color:white;
+}
+
+.custom-height-setting::-webkit-scrollbar {
+    height: 1px;
+    width: 1px;
+}
+
+/* Handle */
+.custom-height-setting::-webkit-scrollbar-thumb {
+    background: #888;
 }

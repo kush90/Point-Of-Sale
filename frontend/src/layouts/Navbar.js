@@ -14,14 +14,21 @@ import {
   MDBCollapse,
   MDBNavbarToggler
 } from 'mdb-react-ui-kit';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import logo from '../assets/pos.png';
+import { clearStorage } from '../Helper';
 
 
 export default function Navbar() {
+  const navigate = useNavigate();
   const location = useLocation();
   const [openToggle, setOpenToggle] = React.useState('');
+
+  const logout = () =>{
+    clearStorage('');
+    navigate('/')
+  }
   return (
     <div>
       <MDBNavbar fixed='top' expand='lg' color="light" bgColor='light'>
@@ -67,13 +74,12 @@ export default function Navbar() {
             </MDBNavbarNav>
 
 
-            <MDBDropdown color="primary" className='d-flex float-end'>
+            <MDBDropdown color="primary" >
               <MDBDropdownToggle color='link' caret="true">
                 <MDBIcon icon="user" />
               </MDBDropdownToggle>
               <MDBDropdownMenu>
-                <MDBDropdownItem link>Profile</MDBDropdownItem>
-                <MDBDropdownItem link>Logout</MDBDropdownItem>
+                <MDBDropdownItem link onClick={logout}>Logout</MDBDropdownItem>
               </MDBDropdownMenu>
             </MDBDropdown>
 

@@ -192,7 +192,6 @@ const RightSide = () => {
                     </MDBCol>
                 </MDBRow>
             </MDBCardBody>
-            <MDBCardFooter className='text-muted'>Pagination</MDBCardFooter>
             <ToastContainer />
         </MDBCard>
 

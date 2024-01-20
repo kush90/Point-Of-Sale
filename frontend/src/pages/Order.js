@@ -131,9 +131,9 @@ const Order = () => {
     }
     return (
         <div className='order'>
-            <MDBRow className='custom-height custom-margin-top'>
-                <MDBCol md='5' style={{ height: 660 }}>
-                    <MDBCard alignment='center' style={{ height: 'inherit' }}>
+            <MDBRow className='custom-margin-top'>
+                <MDBCol md='5'>
+                    <MDBCard alignment='center'>
                         <MDBCardHeader className='text-primary'>
                              Orders
                             <span className='text-danger'> ({orderData.length})       </span>
@@ -142,7 +142,7 @@ const Order = () => {
                                 onKeyUp={searchOrder} label='Order Reference no' placeholder='Enter just last number' id='form1' type='text' />
                             </span>
                         </MDBCardHeader>
-                        <MDBCardBody className='order-card-body'>
+                        <MDBCardBody className='order-card'>
                             <MDBAccordion flush>
                                 {
                                     (loading === false) ? (orderData && orderData.length > 0) && orderData.map((order, index) => {
@@ -190,9 +190,9 @@ const Order = () => {
                         </MDBCardBody>
                     </MDBCard>
                 </MDBCol>
-                <MDBCol md='7' style={{ height: 'inherit' }}>
+                <MDBCol md='7'>
                     {/* order chart */}
-                    <MDBCard alignment='center' style={{ height: 'inherit' }}>
+                    <MDBCard alignment='center' className='custom-height'>
                         <MDBCardHeader className='text-primary' style={{ position: "relative" }}>
 
                             Order Bar Chart Default by <span className='text-danger'>( This Week )</span>
