@@ -133,7 +133,7 @@ const Order = () => {
         <div className='order'>
             <MDBRow className='custom-margin-top'>
                 <MDBCol md='5'>
-                    <MDBCard alignment='center'>
+                    <MDBCard alignment='center' style={{height:'100%'}}>
                         <MDBCardHeader className='text-primary'>
                              Orders
                             <span className='text-danger'> ({orderData.length})       </span>

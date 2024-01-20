@@ -7,7 +7,7 @@
 }
 
 .order .custom-height {
-    height: 320px;
+    height: 322px;
 }
 
 .order-date {
@@ -21,7 +21,7 @@
 }
 
 .order-card {
-    max-height: 585px;
+    height: 585px;
     overflow-y: auto;
 }
 

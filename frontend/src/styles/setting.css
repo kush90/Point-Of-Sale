@@ -4,7 +4,7 @@
 }
 
 .custom-height-setting {
-    max-height: 620px !important;
+    height: 625px !important;
     overflow-y: auto;
 }
 

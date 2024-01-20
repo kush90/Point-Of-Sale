@@ -296,7 +296,7 @@ const Setting = () => {
     return (
         <MDBRow className='custom-margin-top'>
             <MDBCol md='3' >
-                <MDBCard alignment='center'>
+                <MDBCard alignment='center' >
                     <MDBCardHeader>
 
                         <span className='text-primary'>Categories</span>
@@ -313,7 +313,7 @@ const Setting = () => {
                 </MDBCard>
             </MDBCol>
             <MDBCol md='9' >
-                <MDBCard alignment='center'>
+                <MDBCard alignment='center' style={{height:'100%'}}>
                     <MDBCardHeader>
 
                         <span className='text-primary'>Products</span>
