@@ -61,6 +61,9 @@ export default function Navbar() {
               <MDBNavbarItem>
                 <MDBNavbarLink active={location.pathname === '/dashboard/order'}  href='/dashboard/order'>Order</MDBNavbarLink>
               </MDBNavbarItem>
+              <MDBNavbarItem>
+                <MDBNavbarLink active={location.pathname === '/dashboard/user'}  href='/dashboard/user'>User</MDBNavbarLink>
+              </MDBNavbarItem>
             </MDBNavbarNav>
 
 

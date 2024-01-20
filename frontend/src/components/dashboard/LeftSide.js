@@ -114,11 +114,11 @@ const LeftSide = () => {
       let response = await post('api/order/create', { products: cart, totalAmount: totalAmountOfCart() });
       if (response.status === 200) {
         clearStorage('carts');
-        setCart([])
+        setCart([]);
         setReceiptData(response.data.data);
         const event = new Event('cartClear');
         window.dispatchEvent(event);
-        setReceipt(true)
+        setReceipt(true);
         setLoading(false);
         toast.success(response.data.message);
       }
@@ -137,7 +137,7 @@ const LeftSide = () => {
 
   const receiptClose = (value) =>{
     setReceipt(value)
-    setReceiptData([])
+    setReceiptData([]);
   }
 
   return (
@@ -183,7 +183,9 @@ const LeftSide = () => {
           </MDBCol>
         </MDBRow>
       </MDBCardFooter>
-      <><ToastContainer /></>
+   
+        <><ToastContainer /></>
+      
        { qtyAlert && <QtyAlert qtyAlert={qtyAlert} qtyAlertMsg={qtyAlertMsg} toggleOpen={toggleOpen}></QtyAlert>}
       { receipt && <Receipt open={receipt} data={receiptData} toggleOpen={receiptClose}></Receipt>}
     </MDBCard>

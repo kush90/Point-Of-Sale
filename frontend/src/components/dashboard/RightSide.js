@@ -79,7 +79,7 @@ const RightSide = () => {
         getCategoryData();
         getProductData();
         return () => {
-            window.removeEventListener('clearCart', getProductData);
+            window.removeEventListener('cartClear', getProductData);
           };
     }, []);
 

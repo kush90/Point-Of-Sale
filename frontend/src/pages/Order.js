@@ -6,7 +6,6 @@ import {
     MDBIcon,
     MDBBadge, MDBListGroup, MDBListGroupItem,
     MDBSpinner,
-    MDBCardFooter,
     MDBTable, MDBTableHead, MDBTableBody, MDBInput
 } from 'mdb-react-ui-kit';
 import '../styles/order.css'
@@ -133,16 +132,15 @@ const Order = () => {
     return (
         <div className='order'>
             <MDBRow className='custom-height custom-margin-top'>
-                <MDBCol md='5' style={{ height: 615 }}>
+                <MDBCol md='5' style={{ height: 660 }}>
                     <MDBCard alignment='center' style={{ height: 'inherit' }}>
                         <MDBCardHeader className='text-primary'>
-                           <p> Orders
+                             Orders
                             <span className='text-danger'> ({orderData.length})       </span>
                             <span>
                             <MDBInput
                                 onKeyUp={searchOrder} label='Order Reference no' placeholder='Enter just last number' id='form1' type='text' />
                             </span>
-                            </p>
                         </MDBCardHeader>
                         <MDBCardBody className='order-card-body'>
                             <MDBAccordion flush>
@@ -190,7 +188,6 @@ const Order = () => {
                                 }
                             </MDBAccordion>
                         </MDBCardBody>
-                        <MDBCardFooter className='text-muted'>2 days ago</MDBCardFooter>
                     </MDBCard>
                 </MDBCol>
                 <MDBCol md='7' style={{ height: 'inherit' }}>

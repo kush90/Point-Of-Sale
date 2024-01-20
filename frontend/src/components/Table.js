@@ -6,7 +6,7 @@ import BarCodeCanavas from './BarCodeCanavas';
 import '../styles/table.css'
 
 
-const Table = ({ title, header, data, editData, deleteData }) => {
+const Table = ({ title, header, data, editData, deleteData, changePassword }) => {
 
     const editRow = (row) => {
         editData(row)
@@ -34,6 +34,7 @@ const Table = ({ title, header, data, editData, deleteData }) => {
                                 <td className="text-truncate text-primary pointer" style={{ maxWidth: 116 }}>{value.name}</td>
                                 {value.categoryId && <td>{value.categoryId.name}</td>}
                                 {value.price && <td>{value.price}</td>}
+                                {value.type && <td>{value.type}</td>}
                                 {title === 'product' && <td className='text-danger'>{value.qty}</td>}
                                 {title === 'product' && <td className='text-danger'>{value.available}</td>}
                                 {title === 'product' && <td className='text-danger'><BarCodeCanavas value={value.barCode} /></td>}
@@ -50,6 +51,14 @@ const Table = ({ title, header, data, editData, deleteData }) => {
                                             <MDBIcon fas icon="trash" />
                                         </MDBTooltip>
                                     </MDBBtn>
+                                    {
+                                        (title === 'user') &&
+                                    <MDBBtn onClick={() => changePassword(value)} size='sm' className='ms-2  text-success' tag='a' color='light' floating>
+                                        <MDBTooltip tag='span' title="Change Password">
+                                            <MDBIcon fas icon="key" />
+                                        </MDBTooltip>
+                                    </MDBBtn>
+                    }
                                 </td>
                             </tr>
                         )

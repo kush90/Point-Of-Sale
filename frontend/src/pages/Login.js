@@ -68,33 +68,36 @@ const Login = () => {
     if (password !== confirmPassword) {
       toast.error("Password & Confirm Password doesn't match!")
     }
-    let value = {
-      "name": event.target[0].value,
-      "password": event.target[1].value,
-      "type": type
-    };
-    console.log(value);
-    await axios.post(
-      `${API_URL}/api/user/signup`, value
-    )
-      .then((response) => {
-        console.log(response)
-        if (response.status === 200) {
-          createStorage('user', response.data);
-          setLoading(false)
-          navigate('/dashboard');
-        }
-      })
-      .catch(error => {
-        if (error.response && error.response.status === 400) {
-          toast.error(error.response.data.error)
-        }
-        else {
-          toast.error(error.message)
-        }
-        setLoading(false);
-
-      })
+    else {
+      let value = {
+        "name": event.target[0].value,
+        "password": event.target[1].value,
+        "type": type
+      };
+      console.log(value);
+      await axios.post(
+        `${API_URL}/api/user/signup`, value
+      )
+        .then((response) => {
+          console.log(response)
+          if (response.status === 200) {
+            createStorage('user', response.data);
+            setLoading(false)
+            navigate('/dashboard');
+          }
+        })
+        .catch(error => {
+          if (error.response && error.response.status === 400) {
+            toast.error(error.response.data.error)
+          }
+          else {
+            toast.error(error.message)
+          }
+          setLoading(false);
+  
+        })
+    }
+    
   }
   return (
     <MDBContainer className='container-position-center'>
