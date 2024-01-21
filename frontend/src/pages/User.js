@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import {
-     MDBRow, MDBCol, MDBCard,
+    MDBRow, MDBCol, MDBCard,
     MDBCardBody,
-    MDBCardHeader,
+    MDBCardHeader,MDBSpinner
 } from 'mdb-react-ui-kit';
 import '../styles/order.css'
 import { ToastContainer, toast } from 'react-toastify';
@@ -26,6 +26,7 @@ const User = () => {
 
     const getUserData = async () => {
         try {
+            setLoading(true)
             const response = await get('api/user/getAll');
             if (response.status === 200) {
                 setLoading(false);
@@ -73,32 +74,32 @@ const User = () => {
             })
     }
 
-    const editUser = (value) =>{
+    const editUser = (value) => {
         setTempEditData(value);
         setTempPasswordData('');
         setTitle(`Update User`)
     }
 
-    const changePassword = (value) =>{
+    const changePassword = (value) => {
         setTempEditData('');
         setTempPasswordData(value);
         setTitle(`Change Password`)
     }
 
-    const update = async(value) =>{
+    const update = async (value) => {
         try {
             setLoading(true)
-            let response = await patch(`api/user/update/${value._id}?action=${title}`,value);
+            let response = await patch(`api/user/update/${value._id}?action=${title}`, value);
             if (response.status === 200) {
                 toast.success(response.data.message);
                 let newArr = userData.map((obj) =>
-                obj._id === value._id ? { ...obj, "name": value.name } : obj
-            );
-            setUserData(newArr)
-            setLoading(false);
-            setTempEditData('');
-            setTempPasswordData('');
-            setTitle('Create New User')
+                    obj._id === value._id ? { ...obj, "name": value.name } : obj
+                );
+                setUserData(newArr)
+                setLoading(false);
+                setTempEditData('');
+                setTempPasswordData('');
+                setTitle('Create New User')
             }
         }
         catch (error) {
@@ -112,7 +113,7 @@ const User = () => {
                 toast.error(error.message)
             }
             setLoading(false);
-           
+
         }
     }
 
@@ -129,7 +130,7 @@ const User = () => {
         setTitle(`Create User Form`)
     }
 
-    const deleteUser = async() =>{
+    const deleteUser = async () => {
         try {
             setLoading(true)
             let response = await remove(`api/user/delete/${tempDeleteData._id}`);
@@ -165,18 +166,22 @@ const User = () => {
                 <MDBCol md='5' style={{ height: 'inherit' }}>
                     <MDBCard alignment='center' style={{ height: 'inherit' }}>
                         <MDBCardHeader className='text-primary'>
-                            Users 
+                            Users
                             <span className='text-danger'> ({userData.length})       </span>
                         </MDBCardHeader>
                         <MDBCardBody className='order-card-body'>
-                            <Table title={'user'} header={userHeader} data={userData} editData={editUser} deleteData={deleteUserConfirm} changePassword={changePassword} />
+                            {(loading === false) ? (<Table title={'user'} header={userHeader} data={userData} editData={editUser} deleteData={deleteUserConfirm} changePassword={changePassword} />)
+                                : (<MDBSpinner role='status'>
+                                    <span className='visually-hidden'>Loading...</span>
+                                </MDBSpinner>)
+                            }
                         </MDBCardBody>
                     </MDBCard>
                 </MDBCol>
                 <MDBCol md='7' style={{ height: 'inherit' }}>
                     <MDBCard alignment='center' style={{ height: 'inherit' }}>
                         <MDBCardHeader className='text-primary'>
-                             {title} <span className='text-danger'>{tempEditData ? `(${tempEditData.name})` : tempPasswordData ? `(${tempPasswordData.name})` : ''} </span>
+                            {title} <span className='text-danger'>{tempEditData ? `(${tempEditData.name})` : tempPasswordData ? `(${tempPasswordData.name})` : ''} </span>
                             <span className='text-danger'> </span>
                         </MDBCardHeader>
                         <MDBCardBody className='order-card-body'>
@@ -190,17 +195,17 @@ const User = () => {
             {
                 deleteDataUserConfirm && (
                     <SweetAlert
-                    warning
-                    showCancel
-                    confirmBtnText="Yes, delete it!"
-                    confirmBtnBsStyle="danger"
-                    title="Are you sure?"
-                    onConfirm={deleteUser}
-                    onCancel={onCancel}
-                    focusCancelBtn
-                >
-                    You will not be able to recover this data!
-                </SweetAlert>
+                        warning
+                        showCancel
+                        confirmBtnText="Yes, delete it!"
+                        confirmBtnBsStyle="danger"
+                        title="Are you sure?"
+                        onConfirm={deleteUser}
+                        onCancel={onCancel}
+                        focusCancelBtn
+                    >
+                        You will not be able to recover this data!
+                    </SweetAlert>
                 )
             }
         </div>

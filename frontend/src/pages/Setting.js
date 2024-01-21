@@ -3,9 +3,8 @@ import {
     MDBRow, MDBCol, MDBCard,
     MDBCardBody,
     MDBCardHeader,
-    MDBCardFooter,
     MDBBtn,
-    MDBTooltip, MDBIcon
+    MDBTooltip, MDBIcon, MDBSpinner
 } from 'mdb-react-ui-kit';
 import { ToastContainer, toast } from 'react-toastify';
 import SweetAlert from 'react-bootstrap-sweetalert';
@@ -19,7 +18,7 @@ import { get, post, patch, remove } from '../Api';
 
 const Setting = () => {
 
-    const [loading, setLoading] = React.useState(false);
+    const [loading, setLoading] = React.useState(true);
     const [tempDeleteData, setTempDeleteData] = React.useState('');
 
 
@@ -33,11 +32,12 @@ const Setting = () => {
     const [productData, setProductData] = React.useState([]);
     const [deleteDataProductConfirm, setDeleteDataProductConfirm] = React.useState(false)
     const [tempEditProductData, setTempEditProductData] = React.useState('');
-    const productHeader = ['name', 'category', 'price', 'Qty','available','barCode', 'createdAt', 'action'];
+    const productHeader = ['name', 'category', 'price', 'Qty', 'available', 'barCode', 'createdAt', 'action'];
 
 
     const getCategoryData = async () => {
         try {
+            setLoading(true)
             const response = await get('api/category/getAll');
             if (response.status === 200) {
                 setLoading(false);
@@ -57,6 +57,7 @@ const Setting = () => {
 
     const getProductData = async () => {
         try {
+            setLoading(true)
             const response = await get('api/product/getAll');
             if (response.status === 200) {
                 setLoading(false);
@@ -77,7 +78,7 @@ const Setting = () => {
     useEffect(() => {
         getCategoryData();
         getProductData();
-    },[]);
+    }, []);
 
     /*  ====== Product CRUD ====== */
 
@@ -86,15 +87,15 @@ const Setting = () => {
         setProductModal(true);
     }
     const closeProductModal = async (value) => {
-        console.log(value,tempEditProductData)
+        console.log(value, tempEditProductData)
         if (value && tempEditProductData) {
             updateProduct(value);
-           
+
         }
         if (value && !tempEditProductData) createProduct(value)
         setProductModal(false);
         setTempEditProductData('');
-        
+
     }
 
     const createProduct = async (value) => {
@@ -193,10 +194,10 @@ const Setting = () => {
         if (value && tempEditCatData) {
             updateCategory(value);
         }
-        if (value && !tempEditCatData)  createCategory(value)
+        if (value && !tempEditCatData) createCategory(value)
         setCatModal(false);
         setTempEditCatData('');
-       
+
     }
 
     const createCategory = async (value) => {
@@ -308,12 +309,17 @@ const Setting = () => {
 
                     </MDBCardHeader>
                     <MDBCardBody className='custom-height-setting'>
-                        <Table title={'category'} header={categoryHeader} data={categoryData} editData={openCategoryModal} deleteData={deleteCategoryConfirm} />
+                        {(loading === false) ? (<Table title={'category'} header={categoryHeader} data={categoryData} editData={openCategoryModal} deleteData={deleteCategoryConfirm} />)
+                            : (
+                                <MDBSpinner role='status'>
+                                    <span className='visually-hidden'>Loading...</span>
+                                </MDBSpinner>)
+                        }
                     </MDBCardBody>
                 </MDBCard>
             </MDBCol>
             <MDBCol md='9' >
-                <MDBCard alignment='center' style={{height:'100%'}}>
+                <MDBCard alignment='center' style={{ height: '100%' }}>
                     <MDBCardHeader>
 
                         <span className='text-primary'>Products</span>
@@ -324,14 +330,19 @@ const Setting = () => {
                         </MDBBtn>
 
                     </MDBCardHeader>
-                    <MDBCardBody  className='custom-height-setting'>
-                        <Table title={'product'} header={productHeader} data={productData} editData={openProductModal} deleteData={deleteProductConfirm} />
+                    <MDBCardBody className='custom-height-setting'>
+                        {(loading === false) ? (<Table title={'product'} header={productHeader} data={productData} editData={openProductModal} deleteData={deleteProductConfirm} />)
+
+                            : (<MDBSpinner role='status'>
+                                <span className='visually-hidden'>Loading...</span>
+                            </MDBSpinner>)
+                        }
                     </MDBCardBody>
                 </MDBCard>
             </MDBCol>
 
-            { catModal && <CategoryForm open={catModal} closeModal={closeCatModal} data={tempEditCatData} />}
-            { productModal && <ProductForm open={productModal} closeModal={closeProductModal} data={tempEditProductData} category={categoryData} />}
+            {catModal && <CategoryForm open={catModal} closeModal={closeCatModal} data={tempEditCatData} />}
+            {productModal && <ProductForm open={productModal} closeModal={closeProductModal} data={tempEditProductData} category={categoryData} />}
             <ToastContainer />
             {
                 deleteDataCatConfirm && (
@@ -354,17 +365,17 @@ const Setting = () => {
             {
                 deleteDataProductConfirm && (
                     <SweetAlert
-                    warning
-                    showCancel
-                    confirmBtnText="Yes, delete it!"
-                    confirmBtnBsStyle="danger"
-                    title="Are you sure?"
-                    onConfirm={deleteProduct}
-                    onCancel={onCancel}
-                    focusCancelBtn
-                >
-                    You will not be able to recover this data!
-                </SweetAlert>
+                        warning
+                        showCancel
+                        confirmBtnText="Yes, delete it!"
+                        confirmBtnBsStyle="danger"
+                        title="Are you sure?"
+                        onConfirm={deleteProduct}
+                        onCancel={onCancel}
+                        focusCancelBtn
+                    >
+                        You will not be able to recover this data!
+                    </SweetAlert>
                 )
             }
 

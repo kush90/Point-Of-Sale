@@ -19,14 +19,21 @@ import defaultImage from '../assets/default.jpeg';
 
 const Order = () => {
 
-    const [loading, setLoading] = React.useState(true);
+    const [loading, setLoading] = React.useState(false);
     const [orderData, setOrderData] = React.useState([]);
+
+    const [chartLoading, setchartLoading] = React.useState(false);
     const [chartData, setChartData] = React.useState([]);
+
+    const [soldLoading, setSoldLoading] = React.useState(false);
     const [mostSoldProduct, setMostSoldProduct] = React.useState([]);
+
     const [month, setMonth] = React.useState('')
     const [referenceNo, setReferenceNo] = React.useState('ORD0000')
+
     const getOrderData = async () => {
         try {
+            setLoading(true)
             const response = await get('api/order/getAll');
             if (response.status === 200) {
                 setLoading(false);
@@ -45,11 +52,12 @@ const Order = () => {
     }
 
     const getOrderDataChart = async (month) => {
+        setchartLoading(true)
         let monthQuery = (month) ? `?month=${month}` : ''
         try {
             const response = await get(`api/order/chart${monthQuery}`);
             if (response.status === 200) {
-                setLoading(false);
+                setchartLoading(false);
                 setChartData(response.data.data);
             }
         }
@@ -60,15 +68,16 @@ const Order = () => {
             else {
                 toast.error(error.message)
             }
-            setLoading(false);
+            setchartLoading(false);
         }
     }
 
     const getMostSoldProduct = async () => {
         try {
+            setSoldLoading(true)
             const response = await get('api/product/sold');
             if (response.status === 200) {
-                setLoading(false);
+                setSoldLoading(false);
                 setMostSoldProduct(response.data.data);
                 console.log(response.data.data)
             }
@@ -80,7 +89,7 @@ const Order = () => {
             else {
                 toast.error(error.message)
             }
-            setLoading(false);
+            setSoldLoading(false);
         }
     }
 
@@ -96,7 +105,7 @@ const Order = () => {
             getOrderDataChart(e.target.value)
         }
     }
-    
+
     const clearMonth = () => {
         setMonth('');
         getOrderDataChart();
@@ -133,13 +142,13 @@ const Order = () => {
         <div className='order'>
             <MDBRow className='custom-margin-top'>
                 <MDBCol md='5'>
-                    <MDBCard alignment='center' style={{height:'100%'}}>
+                    <MDBCard alignment='center' style={{ height: '100%' }}>
                         <MDBCardHeader className='text-primary'>
-                             Orders
+                            Orders
                             <span className='text-danger'> ({orderData.length})       </span>
                             <span>
-                            <MDBInput
-                                onKeyUp={searchOrder} label='Order Reference no' placeholder='Enter just last number' id='form1' type='text' />
+                                <MDBInput
+                                    onKeyUp={searchOrder} label='Order Reference no' placeholder='Enter just last number' id='form1' type='text' />
                             </span>
                         </MDBCardHeader>
                         <MDBCardBody className='order-card'>
@@ -209,9 +218,9 @@ const Order = () => {
                                 </select>
                             </div>
                         </MDBCardHeader>
-                        <MDBCardBody className='order-card-body'>
+                        <MDBCardBody className='order-card-right'>
                             {
-                                (loading === false) ? (<RechartBarChart orders={chartData} month={month} />) : (
+                                (chartLoading === false) ? (<RechartBarChart orders={chartData} month={month} />) : (
                                     <MDBSpinner role='status'>
                                         <span className='visually-hidden'>Loading...</span>
                                     </MDBSpinner>
@@ -228,50 +237,57 @@ const Order = () => {
                                     Top <span className='text-danger'>(5)</span> Most Sold Products
                                     <span className='text-danger'>  </span>
                                 </MDBCardHeader>
-                                <MDBCardBody className='order-card-body' style={{ height: 'inherit' }}>
-                                    <MDBTable align='middle'>
-                                        <MDBTableHead>
-                                            <tr>
-                                                <th scope='col'>Product</th>
-                                                <th scope='col'>Category</th>
-                                                <th scope='col'>Price</th>
-                                                <th scope='col'>Total Sold</th>
-                                                <th scope='col'>Total Amount</th>
-                                            </tr>
-                                        </MDBTableHead>
-                                        <MDBTableBody style={{ height: 'inherit' }}>
-                                            {
-                                                (mostSoldProduct && mostSoldProduct.length > 0) && mostSoldProduct.map((pro, index) => {
-                                                    return (<tr key={index}>
-                                                        <td>
-                                                            <div className='d-flex align-items-center'>
-                                                                <img
-                                                                    src={(pro.product.images && pro.product.images.length > 0) ? `${API_URL}/${pro.product.images[0]?.path}` : defaultImage} alt={(pro.product.images && pro.product.images.length > 0) ? pro.product.images[0]?.name : 'default'}
-                                                                    style={{ width: '45px', height: '45px' }}
-                                                                    className='rounded-circle'
-                                                                />
-                                                                <div className='ms-3'>
-                                                                    <p className='fw-bold mb-1'>{pro.product.name}</p>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <p className='fw-normal mb-1'>{pro.product.category?.name}</p>
-                                                        </td>
-                                                        <td>
-                                                            <p className='fw-normal mb-1'>{pro.product.price}</p>
+                                <MDBCardBody className='order-card-right' style={{ height: 'inherit' }}>
+                                    {
+                                        (soldLoading === false) ?
 
-                                                        </td>
-                                                        <td> <p className='fw-normal mb-1'>{pro.sold}</p></td>
-                                                        <td>
-                                                            <p className='fw-normal mb-1'>{pro.totalAmount}</p>
-                                                        </td>
-                                                    </tr>)
-                                                })
-                                            }
+                                            <MDBTable align='middle'>
+                                                <MDBTableHead>
+                                                    <tr>
+                                                        <th scope='col'>Product</th>
+                                                        <th scope='col'>Category</th>
+                                                        <th scope='col'>Price</th>
+                                                        <th scope='col'>Total Sold</th>
+                                                        <th scope='col'>Total Amount</th>
+                                                    </tr>
+                                                </MDBTableHead>
+                                                <MDBTableBody style={{ height: 'inherit' }}>
+                                                    {
+                                                        (mostSoldProduct && mostSoldProduct.length > 0) && mostSoldProduct.map((pro, index) => {
+                                                            return (<tr key={index}>
+                                                                <td>
+                                                                    <div className='d-flex align-items-center'>
+                                                                        <img
+                                                                            src={(pro.product.images && pro.product.images.length > 0) ? `${API_URL}/${pro.product.images[0]?.path}` : defaultImage} alt={(pro.product.images && pro.product.images.length > 0) ? pro.product.images[0]?.name : 'default'}
+                                                                            style={{ width: '45px', height: '45px' }}
+                                                                            className='rounded-circle'
+                                                                        />
+                                                                        <div className='ms-3'>
+                                                                            <p className='fw-bold mb-1'>{pro.product.name}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <p className='fw-normal mb-1'>{pro.product.category?.name}</p>
+                                                                </td>
+                                                                <td>
+                                                                    <p className='fw-normal mb-1'>{pro.product.price}</p>
 
-                                        </MDBTableBody>
-                                    </MDBTable>
+                                                                </td>
+                                                                <td> <p className='fw-normal mb-1'>{pro.sold}</p></td>
+                                                                <td>
+                                                                    <p className='fw-normal mb-1'>{pro.totalAmount}</p>
+                                                                </td>
+                                                            </tr>)
+                                                        })
+                                                    }
+
+                                                </MDBTableBody>
+                                            </MDBTable>
+                                            : (<MDBSpinner role='status'>
+                                                <span className='visually-hidden'>Loading...</span>
+                                            </MDBSpinner>)
+                                    }
                                 </MDBCardBody>
                             </MDBCard>
                         </MDBCol>
