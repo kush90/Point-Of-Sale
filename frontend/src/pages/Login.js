@@ -119,7 +119,7 @@ const Login = () => {
             </MDBContainer>
           </MDBNavbar>
 
-          <MDBTabs pills justify>
+          <MDBTabs pills justify className='login mb-2'>
             <MDBTabsItem>
               <MDBTabsLink
                

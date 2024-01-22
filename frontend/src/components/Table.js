@@ -46,11 +46,15 @@ const Table = ({ title, header, data, editData, deleteData, changePassword }) =>
                                             <MDBIcon fas icon="edit" />
                                         </MDBTooltip>
                                     </MDBBtn>
-                                    <MDBBtn onClick={() => deleteData(value)} size='sm' className='ms-2  text-danger' tag='a' color='light' floating>
+                                    {
+                                        (value?.type !== 'Super Admin' ) &&
+                                        <MDBBtn onClick={() => deleteData(value)} size='sm' className='ms-2  text-danger' tag='a' color='light' floating>
                                         <MDBTooltip tag='span' title="Delete">
                                             <MDBIcon fas icon="trash" />
                                         </MDBTooltip>
                                     </MDBBtn>
+                                    }
+                                   
                                     {
                                         (title === 'user') &&
                                     <MDBBtn onClick={() => changePassword(value)} size='sm' className='ms-2  text-success' tag='a' color='light' floating>
@@ -62,7 +66,7 @@ const Table = ({ title, header, data, editData, deleteData, changePassword }) =>
                                 </td>
                             </tr>
                         )
-                    }) : (<tr><td colSpan={header.length + 1}>No Data</td></tr>)
+                    }) : (<tr><td className='no-data-setting' colSpan={header.length + 1}>No Data</td></tr>)
                 }
             </MDBTableBody>
 

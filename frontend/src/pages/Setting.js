@@ -300,7 +300,7 @@ const Setting = () => {
                 <MDBCard alignment='center' >
                     <MDBCardHeader>
 
-                        <span className='text-primary'>Categories</span>
+                        <span className='text-primary'>Categories</span> <span className='text-danger'>({categoryData.length})</span>
                         <MDBBtn onClick={() => setCatModal(true)} size='sm' className='text-primary position-absolute top-0 end-0 mt-1 me-3' tag='a' color='light' floating>
                             <MDBTooltip tag='span' title="Add Category">
                                 <MDBIcon fas icon="add" />
@@ -322,7 +322,7 @@ const Setting = () => {
                 <MDBCard alignment='center' style={{ height: '100%' }}>
                     <MDBCardHeader>
 
-                        <span className='text-primary'>Products</span>
+                        <span className='text-primary'>Products</span> <span className='text-danger'>({productData.length})</span>
                         <MDBBtn onClick={() => setProductModal(true)} size='sm' className='text-primary position-absolute top-0 end-0 mt-1 me-3' tag='a' color='light' floating>
                             <MDBTooltip tag='span' title="Add Category">
                                 <MDBIcon fas icon="add" />

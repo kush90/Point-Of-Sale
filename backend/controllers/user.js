@@ -71,7 +71,7 @@ const update = async (req, res) => {
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(404).json({ error: 'No such user' })
         }
-        if (req.query.action !== 'Update User Form') {
+        if (req.query.action !== 'Update User') {
             if (!validator.isStrongPassword(req.body.password)) {
                 throw Error('Password is not strong enough');
             }

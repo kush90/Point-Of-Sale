@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   MDBNavbar,
   MDBContainer,
@@ -17,16 +17,21 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 
 import logo from '../assets/pos.png';
-import { clearStorage } from '../Helper';
+import { clearStorage,getStorage } from '../Helper';
 
 
 export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [openToggle, setOpenToggle] = React.useState('');
+  const [user, setUser] = React.useState('');
 
+  useEffect(()=>{
+    setUser(JSON.parse(getStorage('user')));
+  },[])
   const logout = () =>{
     clearStorage('');
+    setUser('')
     navigate('/')
   }
   return (
@@ -63,19 +68,20 @@ export default function Navbar() {
                 </MDBNavbarLink>
               </MDBNavbarItem>
               <MDBNavbarItem>
-                <MDBNavbarLink active={location.pathname === '/dashboard/setting'}  href='/dashboard/setting'>Dashboard</MDBNavbarLink>
+                <MDBNavbarLink style={{ visibility: user.type=='Admin' ? 'hidden': ''}} active={location.pathname === '/dashboard/setting'}  href='/dashboard/setting'>Dashboard</MDBNavbarLink>
               </MDBNavbarItem>
               <MDBNavbarItem>
-                <MDBNavbarLink active={location.pathname === '/dashboard/order'}  href='/dashboard/order'>Order</MDBNavbarLink>
+                <MDBNavbarLink style={{ visibility: user.type=='Admin' ? 'hidden': ''}} active={location.pathname === '/dashboard/order'}  href='/dashboard/order'>Order</MDBNavbarLink>
               </MDBNavbarItem>
               <MDBNavbarItem>
-                <MDBNavbarLink active={location.pathname === '/dashboard/user'}  href='/dashboard/user'>User</MDBNavbarLink>
+                <MDBNavbarLink style={{ visibility: user.type=='Admin' ? 'hidden': ''}} active={location.pathname === '/dashboard/user'}  href='/dashboard/user'>User</MDBNavbarLink>
               </MDBNavbarItem>
             </MDBNavbarNav>
 
 
             <MDBDropdown color="primary" >
               <MDBDropdownToggle color='link' caret="true">
+               {user.user} &nbsp;
                 <MDBIcon icon="user" />
               </MDBDropdownToggle>
               <MDBDropdownMenu>

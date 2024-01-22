@@ -141,3 +141,15 @@
 .nav-pills {
     margin-left: 0px !important;
 }
+
+.no-data-setting {
+    position: absolute;
+    top: 50%;
+    left: 41%;
+    border: none;
+}
+.no-data-category {
+    position: absolute;
+    top:50%;
+    left:5%;
+}

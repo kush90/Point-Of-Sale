@@ -3,7 +3,6 @@ import {
     MDBRow, MDBCol, MDBCard,
     MDBCardBody,
     MDBCardHeader,
-    MDBCardFooter,
     MDBInput,
     MDBTabs,
     MDBTabsItem,
@@ -138,12 +137,15 @@ const RightSide = () => {
                         <div className="overflow-y-scroll right-side-category">
                             <MDBTabs pills className='flex-column text-center'>
                                 <MDBTabsItem>
+                                    {
+                                        (categoryData.length > 0) &&
                                     <MDBTabsLink onClick={() => handleCategory(`all`)} active={category === `all`} >
                                         All
                                     </MDBTabsLink>
+                                    }
                                 </MDBTabsItem>
                                 {
-                                    (loading === false) ? (categoryData.length > 0) && categoryData.map((cat, index) => {
+                                    (loading === false) ? (categoryData.length > 0) ? categoryData.map((cat, index) => {
 
                                         return (
                                             <MDBTabsItem key={cat._id}>
@@ -153,7 +155,7 @@ const RightSide = () => {
                                             </MDBTabsItem>
                                         )
 
-                                    }) : (
+                                    }) : (<p className='no-data-category'>No Data</p>): (
                                         <MDBTabsItem>
                                             <MDBTabsLink>
                                                 <MDBSpinner role='status'>
@@ -170,7 +172,7 @@ const RightSide = () => {
                     <MDBCol md='10'>
                         <MDBRow>
                             {
-                                (loading === false) ? (productData.length > 0) && productData.map((pro, index) => {
+                                (loading === false) ? (productData.length > 0) ? productData.map((pro, index) => {
 
                                     return (
                                         (pro.available > 0) && (
@@ -180,7 +182,7 @@ const RightSide = () => {
                                         )
                                     )
 
-                                })
+                                }) : (<p className='no-data'>No Data</p>)
                                     : (
                                         <MDBSpinner role='status'>
                                             <span className='visually-hidden'>Loading...</span>

@@ -154,7 +154,7 @@ const Order = () => {
                         <MDBCardBody className='order-card'>
                             <MDBAccordion flush>
                                 {
-                                    (loading === false) ? (orderData && orderData.length > 0) && orderData.map((order, index) => {
+                                    (loading === false) ? (orderData && orderData.length > 0) ? orderData.map((order, index) => {
 
                                         return (
 
@@ -187,12 +187,13 @@ const Order = () => {
                                         )
                                     }) :
                                         (
+                                            <span className='no-data-order'>No Data</span>
 
-                                            <MDBSpinner role='status'>
-                                                <span className='visually-hidden'>Loading...</span>
-                                            </MDBSpinner>
 
-                                        )
+                                        ) : (
+                                        <MDBSpinner role='status'>
+                                            <span className='visually-hidden'>Loading...</span>
+                                        </MDBSpinner>)
 
                                 }
                             </MDBAccordion>
@@ -220,11 +221,14 @@ const Order = () => {
                         </MDBCardHeader>
                         <MDBCardBody className='order-card-right'>
                             {
-                                (chartLoading === false) ? (<RechartBarChart orders={chartData} month={month} />) : (
-                                    <MDBSpinner role='status'>
-                                        <span className='visually-hidden'>Loading...</span>
-                                    </MDBSpinner>
+                                (chartLoading === false) ? (orderData.length > 0) ? (<RechartBarChart orders={chartData} month={month} />) : (
+                                    <span className='no-data-chart'>No Data</span>
                                 )
+                                    : (
+                                        <MDBSpinner role='status'>
+                                            <span className='visually-hidden'>Loading...</span>
+                                        </MDBSpinner>
+                                    )
                             }
 
                         </MDBCardBody>
@@ -253,7 +257,7 @@ const Order = () => {
                                                 </MDBTableHead>
                                                 <MDBTableBody style={{ height: 'inherit' }}>
                                                     {
-                                                        (mostSoldProduct && mostSoldProduct.length > 0) && mostSoldProduct.map((pro, index) => {
+                                                        (mostSoldProduct && mostSoldProduct.length > 0) ? mostSoldProduct.map((pro, index) => {
                                                             return (<tr key={index}>
                                                                 <td>
                                                                     <div className='d-flex align-items-center'>
@@ -279,7 +283,7 @@ const Order = () => {
                                                                     <p className='fw-normal mb-1'>{pro.totalAmount}</p>
                                                                 </td>
                                                             </tr>)
-                                                        })
+                                                        }) : (<tr><td className='no-data-most-sale'>No Data</td></tr>)
                                                     }
 
                                                 </MDBTableBody>

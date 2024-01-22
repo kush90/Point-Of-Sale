@@ -39,5 +39,12 @@
 
 .nav-position {
     position: relative;
-top: 5px;
+    top: 5px;
+}
+
+.login .nav-link, .nav-justified .nav-item .nav-link {
+    display: inline-block !important;
+    position: relative !important;
+    left: -8px !important;
+    width:100% !important;
 }
