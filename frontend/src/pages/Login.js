@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import '../styles/login.css'
 import logo from '../assets/pos.png';
 import {
@@ -14,8 +14,7 @@ import {
   MDBTabsLink,
   MDBTabsContent,
   MDBTabsPane,
-  MDBSpinner,
-  MDBRadio
+  MDBSpinner
 } from 'mdb-react-ui-kit';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -26,9 +25,11 @@ import { createStorage, API_URL } from "../Helper";
 
 const Login = () => {
   const navigate = useNavigate();
+  const loginRef = useRef(null);
+  const forgotRef = useRef(null);
   const [loginRegisterActive, setLoginRegisterActive] = React.useState('login');
   const [loading, setLoading] = React.useState(false);
-  const [type, setType] = React.useState('');
+  const [isForgot, setIsForgot] = React.useState(false);
 
   const signIn = async (event) => {
     setLoading(true)
@@ -41,11 +42,11 @@ const Login = () => {
       `${API_URL}/api/user/login`, value
     )
       .then((response) => {
-        console.log(response)
         if (response.status === 200) {
           createStorage('user', response.data);
           setLoading(false)
           navigate('/dashboard');
+          resetForm(loginRef)
         }
       })
       .catch(error => {
@@ -60,30 +61,31 @@ const Login = () => {
       })
   }
 
-  const register = async (event) => {
+  const forgot = async (event) => {
     setLoading(true)
     event.preventDefault();
     let password = event.target[1].value;
     let confirmPassword = event.target[2].value;
     if (password !== confirmPassword) {
-      toast.error("Password & Confirm Password doesn't match!")
+      toast.error("Password & Confirm Password doesn't match!");
+      setLoading(false)
     }
     else {
       let value = {
         "name": event.target[0].value,
         "password": event.target[1].value,
-        "type": type
       };
-      console.log(value);
       await axios.post(
-        `${API_URL}/api/user/signup`, value
+        `${API_URL}/api/user/forgot`, value
       )
         .then((response) => {
-          console.log(response)
           if (response.status === 200) {
-            createStorage('user', response.data);
             setLoading(false)
-            navigate('/dashboard');
+            toast.success(response.data.message);
+            setIsForgot(false);
+            setLoginRegisterActive('login');
+            console.log(event.target);
+            resetForm(forgotRef)
           }
         })
         .catch(error => {
@@ -94,10 +96,15 @@ const Login = () => {
             toast.error(error.message)
           }
           setLoading(false);
-  
+
         })
     }
-    
+  }
+
+  const resetForm = (formRef) => {
+    if (formRef && formRef.current) {
+      formRef.current.reset();
+    }
   }
   return (
     <MDBContainer className='container-position-center'>
@@ -120,87 +127,80 @@ const Login = () => {
           </MDBNavbar>
 
           <MDBTabs pills justify className='login mb-2'>
-            <MDBTabsItem>
-              <MDBTabsLink
-               
-                onClick={() => !loading && setLoginRegisterActive('login')}
-                active={loginRegisterActive === 'login'}
+
+            {
+              (isForgot === true) ? (<MDBTabsItem> <MDBTabsLink className='forgot-tab'
+
+
+                active={loginRegisterActive === 'forgot'}
               >
-                Login
-              </MDBTabsLink>
-            </MDBTabsItem>
-            {/* <MDBTabsItem>
-              <MDBTabsLink className='register-tab'
-               
-                onClick={() => !loading && setLoginRegisterActive('register')}
-                active={loginRegisterActive === 'register'}
-              >
-                Register
-              </MDBTabsLink>
-            </MDBTabsItem> */}
+                Forgot Password
+              </MDBTabsLink> </MDBTabsItem>) : (<MDBTabsItem>
+                <MDBTabsLink
+
+
+                  active={loginRegisterActive === 'login'}
+                >
+                  Login
+                </MDBTabsLink>
+              </MDBTabsItem>)
+            }
+
           </MDBTabs>
 
           <MDBTabsContent>
-            <MDBTabsPane open={loginRegisterActive === 'login'}>
-              <form onSubmit={signIn}>
 
-                <MDBInput className='mb-4' type='text' id='username' label='User name' required />
-                <MDBInput className='mb-4' type='password' id='password' label='Password' required />
 
-                <MDBRow className='mb-4'>
-                  <MDBCol>
-                    <a href='#!'>Forgot password?</a>
-                  </MDBCol>
-                </MDBRow>
+            {
+              (isForgot === true) ?
+                <MDBTabsPane open={(loginRegisterActive === 'forgot')}>
+                  <form onSubmit={forgot} ref={forgotRef}>
+                    <MDBInput className='mb-4' type='text' id='usernamef' label='User name' required />
+                    <MDBInput className='mb-4' type='password' id='passwordf' label='Password' />
+                    <MDBInput className='mb-4' type='password' id='confirmf' label='Repeat password' />
+                    <MDBRow className='mb-4'>
+                      <MDBCol>
+                        <a href='#!' onClick={() => { setIsForgot(false); setLoginRegisterActive('login'); resetForm(forgotRef) }}>Login?</a>
+                      </MDBCol>
+                    </MDBRow>
+                    {loading === false ? (
+                      <MDBBtn type='submit' className='mb-4 register-btn' block='true'>
+                        Submit
+                      </MDBBtn>
+                    ) : (<MDBBtn disabled className='mb-4 register-btn' block='true'>
+                      <MDBSpinner size='sm' role='status' tag='span' className='me-2 loader-position' block='true' />
+                      Submitting ...
+                    </MDBBtn>)
 
-                {loading === false ? (
-                  <MDBBtn type='submit' className='mb-4' block='true'>
-                    Sign in
-                  </MDBBtn>
-                ) : (<MDBBtn disabled className='mb-4' block='true'>
-                  <MDBSpinner size='sm' role='status' tag='span' className='me-2 loader-position' block='true' />
-                  Signing in...
-                </MDBBtn>)
+                    }
+                  </form>
 
-                }
-              </form>
-              {/* <div className='text-center'>
-                <span className='custom-text'>
-                  Not a member ?
-                </span>
-                <MDBBtn disabled={loading === true} className='login-register-btn' color="primary" onClick={() => setLoginRegisterActive('register')} size="sm">Register</MDBBtn>
-              </div> */}
+                </MDBTabsPane> : <MDBTabsPane open={loginRegisterActive === 'login'}>
+                  <form onSubmit={signIn} ref={loginRef}>
 
-            </MDBTabsPane>
+                    <MDBInput className='mb-4' type='text' id='usernamel' label='User name' required />
+                    <MDBInput className='mb-4' type='password' id='passwordl' label='Password' required />
 
-            {/* <MDBTabsPane open={(loginRegisterActive === 'register')}>
-              <form onSubmit={register}>
+                    <MDBRow className='mb-4'>
+                      <MDBCol>
+                        <a href='#!' onClick={() => { setIsForgot(true); setLoginRegisterActive('forgot'); resetForm(loginRef) }}>Forgot password?</a>
+                      </MDBCol>
+                    </MDBRow>
 
-                <MDBInput className='mb-4' id='form8Example2' label='Username' />
-                <MDBInput className='mb-4' type='password' id='form8Example4' label='Password' />
-                <MDBInput className='mb-4' type='password' id='form8Example5' label='Repeat password' />
-                <MDBRadio name='type' id='inlineRadio1' value='Super Admin' label='Super Admin' inline onClick={() => setType('Super Admin')} />
-                <MDBRadio name='type' id='inlineRadio2' value='Admin' label='Admin' inline onClick={() => setType('Admin')} />
+                    {loading === false ? (
+                      <MDBBtn type='submit' className='mb-4' block='true'>
+                        Sign in
+                      </MDBBtn>
+                    ) : (<MDBBtn disabled className='mb-4' block='true'>
+                      <MDBSpinner size='sm' role='status' tag='span' className='me-2 loader-position' block='true' />
+                      Signing in...
+                    </MDBBtn>)
 
-                {loading === false ? (
-                  <MDBBtn type='submit' className='mb-4 register-btn' block='true'>
-                    Register
-                  </MDBBtn>
-                ) : (<MDBBtn disabled className='mb-4 register-btn' block='true'>
-                  <MDBSpinner size='sm' role='status' tag='span' className='me-2 loader-position' block='true' />
-                  Register ...
-                </MDBBtn>)
+                    }
+                  </form>
+                </MDBTabsPane>
+            }
 
-                }
-              </form>
-              <div className='text-center'>
-                <span className='custom-text'>
-                  Already a member ?
-                </span>
-                <MDBBtn disabled={loading === true} className='login-register-btn' color="primary" onClick={() => setLoginRegisterActive('login')} size="sm">Login</MDBBtn>
-              </div>
-
-            </MDBTabsPane> */}
           </MDBTabsContent>
         </MDBCol>
       </MDBRow>

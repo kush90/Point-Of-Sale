@@ -323,11 +323,15 @@ const Setting = () => {
                     <MDBCardHeader>
 
                         <span className='text-primary'>Products</span> <span className='text-danger'>({productData.length})</span>
-                        <MDBBtn onClick={() => setProductModal(true)} size='sm' className='text-primary position-absolute top-0 end-0 mt-1 me-3' tag='a' color='light' floating>
-                            <MDBTooltip tag='span' title="Add Category">
-                                <MDBIcon fas icon="add" />
-                            </MDBTooltip>
-                        </MDBBtn>
+                            {
+                                categoryData.length > 0 && ( <MDBBtn onClick={() => setProductModal(true)} size='sm' className='text-primary position-absolute top-0 end-0 mt-1 me-3' tag='a' color='light' floating>
+
+                                <MDBTooltip tag='span' title="Add Product">
+                                    <MDBIcon fas icon="add" />
+                                </MDBTooltip>
+                            </MDBBtn>)
+                            }
+                   
 
                     </MDBCardHeader>
                     <MDBCardBody className='custom-height-setting'>

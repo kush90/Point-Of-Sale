@@ -81,7 +81,7 @@ userSchema.statics.forgotPassword = async function (name, password) {
         const hash = await bcrypt.hash(password, salt);
         user.password = hash;
         user.save();
-        return "Password is changed successfully.Please try to login with new one";
+        return "Password is changed successfully.Please try to login with new one.";
     } catch (error) {
         throw Error(error.message);
     }
