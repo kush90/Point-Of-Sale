@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 const UserForm = ({ create, data, passwordData, update }) => {
 
     const [name, setName] = React.useState('');
-    const [passwordRule, setPasswordRule] = React.useState('');
+    const [passwordRule, setPasswordRule] = React.useState(false);
 
     useEffect(() => {
         if (data) setName(data.name);

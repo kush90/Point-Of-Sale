@@ -14,7 +14,8 @@ import {
   MDBTabsLink,
   MDBTabsContent,
   MDBTabsPane,
-  MDBSpinner
+  MDBSpinner,
+  MDBTypography, MDBIcon
 } from 'mdb-react-ui-kit';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -30,6 +31,8 @@ const Login = () => {
   const [loginRegisterActive, setLoginRegisterActive] = React.useState('login');
   const [loading, setLoading] = React.useState(false);
   const [isForgot, setIsForgot] = React.useState(false);
+  const [passwordRule, setPasswordRule] = React.useState(false);
+
 
   const signIn = async (event) => {
     setLoading(true)
@@ -106,6 +109,11 @@ const Login = () => {
       formRef.current.reset();
     }
   }
+
+  const handleClick = () => {
+    setPasswordRule(!passwordRule)
+}
+
   return (
     <MDBContainer className='container-position-center'>
 
@@ -158,7 +166,30 @@ const Login = () => {
                     <MDBInput className='mb-4' type='text' id='usernamef' label='User name' required />
                     <MDBInput className='mb-4' type='password' id='passwordf' label='Password' />
                     <MDBInput className='mb-4' type='password' id='confirmf' label='Repeat password' />
-                    <MDBRow className='mb-4'>
+                    <span className='pointer' onClick={handleClick}>
+
+                      <MDBIcon icon='question-circle' className='me-2 text-warning' />Password Rule!
+                    </span>
+                    {
+                      (passwordRule) &&
+
+                      <MDBTypography listUnStyled className='mb-0 rule'>
+                        <li >
+                          <MDBIcon icon='check-circle' className='me-2 text-success' />Must have 8 characters
+                        </li>
+                        <li >
+                          <MDBIcon icon='check-circle' className='me-2 text-success' />Must have 1 Special Character [-@#$%^&]
+                        </li>
+                        <li >
+                          <MDBIcon icon='check-circle' className='me-2 text-success' />Must have 1 Upper Case Alphabet
+                        </li>
+                        <li >
+                          <MDBIcon icon='check-circle' className='me-2 text-success' />Must have 1 Numeric Number
+                        </li>
+                      </MDBTypography>
+
+                    }
+                    <MDBRow className='mb-4 mt-2'>
                       <MDBCol>
                         <a href='#!' onClick={() => { setIsForgot(false); setLoginRegisterActive('login'); resetForm(forgotRef) }}>Login?</a>
                       </MDBCol>
