@@ -2,6 +2,7 @@ const Stripe = require('stripe');
 const stripe = Stripe(process.env.STRIPE_KEY);
 
 const create = async (req, res) => {
+  console.log(req.body)
     let { currency,orderId} = req.body;
       let amount = orderId.amount*100;
       let order = orderId.orderId;
@@ -15,6 +16,7 @@ const create = async (req, res) => {
       clientSecret: paymentIntent.client_secret,
     });
   } catch (error) {
+    console.error('Error creating payment intent:', error); // Log the error for debugging
     res.status(500).send(error);
   }
 }
