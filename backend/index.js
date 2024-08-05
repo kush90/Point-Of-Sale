@@ -9,6 +9,7 @@ const userRoutes = require('./routes/user')
 const productRoutes =  require('./routes/product')
 const categoryRoutes =  require('./routes/category')
 const orderRoutes =  require('./routes/order')
+const paymentRoutes = require('./routes/payment')
 const auth = require('./middleware/auth');
 
 // express app
@@ -32,7 +33,8 @@ app.use('/test/welcome',auth,(req,res)=>{
 app.use('/api/user', userRoutes);
 app.use('/api/product',productRoutes);
 app.use('/api/category',categoryRoutes);
-app.use('/api/order',orderRoutes)
+app.use('/api/order',orderRoutes);
+app.use('/api/payment',paymentRoutes);
 
 // connect to db
 mongoose.connect(process.env.MONGO_URI)

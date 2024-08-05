@@ -187,11 +187,15 @@ a {
 ------------------------------------- */
 .receipt .alert {
     font-size: 16px;
-    color: #fff;
+    /* color: #fff; */
     font-weight: 500;
     padding: 20px;
     text-align: center;
     border-radius: 3px 3px 0 0;
+}
+
+.payment-padding {
+    padding: 10px !important;
 }
 
 .receipt .alert a {
@@ -282,14 +286,17 @@ a {
 
 @media print {
     body * {
-      visibility: hidden;
+        visibility: hidden;
     }
-    #printTable, #printTable * {
-      visibility: visible;
+
+    #printTable,
+    #printTable * {
+        visibility: visible;
     }
+
     #printTable {
-      position: absolute;
-      left: 0;
-      top: 0;
+        position: absolute;
+        left: 0;
+        top: 0;
     }
-  }
+}

@@ -9,17 +9,21 @@ import {
     MDBModalFooter,
 } from 'mdb-react-ui-kit';
 import '../../styles/receipt.css';
-import { formatDateToLocaleString,getStorage } from '../../Helper';
+import { formatDateToLocaleString, getStorage } from '../../Helper';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import CheckoutForm from '../CheckOutForm'
+const stripePromise = loadStripe('pk_test_51PitVX08BK5LTkERTMgbLG6QGjgQK5f1dv7kyPMl8vrpBgVFmrJcJKtxg4Cx6gzqnsS4hVilB3WfPMPzGuuQMf9j00j2ZPgzlB'); // Replace with your publishable key
 
 const Receipt = ({ open, toggleOpen, data }) => {
-    const [user,setUser] = React.useState('')
-    const getLoginUser = () =>{
+    const [user, setUser] = React.useState('')
+    const getLoginUser = () => {
         setUser(JSON.parse(getStorage('user')));
     }
 
     useEffect(() => {
         getLoginUser();
-    },[data]);
+    }, [data]);
 
     const closeDialog = () => {
         toggleOpen(false)
@@ -35,11 +39,11 @@ const Receipt = ({ open, toggleOpen, data }) => {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-      };
+    };
 
     return (
         <>
-            <MDBModal staticBackdrop className="receipt" open={open}  tabIndex='-1'>
+            <MDBModal staticBackdrop className="receipt" open={open} tabIndex='-1'>
                 <MDBModalDialog>
                     <MDBModalContent>
                         <MDBModalHeader className='bg-primary' style={{ height: 50 }}>
@@ -68,7 +72,7 @@ const Receipt = ({ open, toggleOpen, data }) => {
                                                                                 <tr>
                                                                                     <td>
                                                                                         <table className="invoice-items" cellPadding="0" cellSpacing="0">
-                                                                                        
+
                                                                                             <tbody>
                                                                                                 <>
                                                                                                     {
@@ -120,6 +124,9 @@ const Receipt = ({ open, toggleOpen, data }) => {
                                     <td></td>
                                 </tr>
                                 </tbody></table>
+                            <Elements stripe={stripePromise}>
+                                <CheckoutForm orderId={data.referenceNo} amount={data.totalAmount} />
+                            </Elements>
                         </MDBModalBody>
 
                         <MDBModalFooter>
@@ -127,7 +134,7 @@ const Receipt = ({ open, toggleOpen, data }) => {
                                 Close
                             </MDBBtn>
                             <MDBBtn color='danger' onClick={downloadReceipt}>Download</MDBBtn>
-                            <MDBBtn  color='success'onClick={()=>window.print()}>Print</MDBBtn>
+                            <MDBBtn color='success' onClick={() => window.print()}>Print</MDBBtn>
                         </MDBModalFooter>
                     </MDBModalContent>
                 </MDBModalDialog>
